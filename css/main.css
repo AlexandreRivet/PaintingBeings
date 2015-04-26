@@ -1,0 +1,152 @@
+/*
+    Syntaxe CSS:
+    -> Positionnement  / Taille
+    -> Apparence
+    -> Autres (Animations)
+*/
+
+/**********************
+        FONTS
+**********************/
+@font-face {
+    font-family: 'LeagueGothic';
+    src: url('leaguegothic.eot');
+    src: url('leaguegothic.eot?#iefix') format('embedded-opentype'),
+			url('leaguegothic.svg#caviar_dreamsbold') format('svg'),
+         url('leaguegothic.woff') format('woff'),
+         url('leaguegothic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+*
+{
+    margin: 0px;
+    padding: 0px;
+    
+    font-family: "LeagueGothic";
+}
+
+.separateFirst
+{
+    width: 100%;
+    height: 2px;
+}
+
+.separateSecond
+{
+    margin: 0px 15px;
+}
+
+.separateThird
+{
+    width: 100%;
+    height: 100%;
+    
+    background-color: white;
+}
+
+#header
+{
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 75px;
+    
+    color: #222;
+    background-color: #333;
+    border-bottom: 1px solid white;    
+}
+
+h1
+{
+    text-align: center;
+    text-shadow: -2px -2px 0 #fff,  2px -2px 0 #fff, -2px  2px 0 #fff, 2px  2px 0 #fff;
+}
+
+h1#title
+{
+    font-size: 47pt;
+}
+
+h1#names
+{
+    margin-top: 15px;
+    font-size: 30pt;
+}
+
+#content
+{
+    position: absolute;
+    top: 76px;
+    bottom: 76px;
+    width: 100%;
+}
+
+#middlePanel
+{
+    width: 100%;
+    height: 100%;
+    
+    display: table;
+}
+
+#drawingArea
+{
+    width: 50%;
+    height: 100%;
+    
+    display: table-cell;
+    background-color: #555;
+    border-right: 2px solid white;
+}
+
+#webgl_canvas
+{
+    width: 100%;
+    height: 100%;
+}
+
+#parameters
+{
+    width: 50%;
+    height: 100%;
+    vertical-align: top;
+ 
+    display: table-cell;
+    background-color: #555;
+    border-left: 2px solid white;
+}
+
+#titleParameters
+{
+    height: 50px;
+    text-align: center;
+    
+    color: white;
+    font-size: 25pt;
+    text-decoration: underline;
+}
+
+#loadImageDecal
+{
+    margin: 0px 5px;
+}
+
+#load_input
+{
+    width: 100%;
+    
+    background-color: white;
+}
+
+#footer
+{
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    height: 75px;
+    
+    background-color: #222;
+    border-top: 1px solid white;
+}

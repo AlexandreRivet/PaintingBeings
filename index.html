@@ -1,11 +1,68 @@
 <html>
 
-    <head>
+<head>
+
+    <title>Painting Beings v2</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     
-    </head>
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="css/main.css">
     
-    <body>
+    <!-- Libs JS -->
+    <script type="text/javascript" src="libs/jquery/jquery-2.1.3.js"></script>
+    <script type="text/javascript" src="libs/three/three.js"></script>
     
-    </body>
+    <!-- Scripts JS -->
+    <script type="text/javascript" src="js/main.js"></script>
+    
+</head>
+    
+<body>
+    
+    <!-- Entête -->
+    <div id="header">
+        <h1 id="title">PAINTING BEINGS</h1>
+    </div>
+    
+    <!-- Contenu central avec la zone de dessin et la zone de paramétrages -->
+    <div id="content">
+        
+        <div id="middlePanel">
+        
+            <div id="drawingArea">
+                <canvas id="webgl_canvas">Your browser seems to not support canvas hmtl.</canvas>
+            </div>
+        
+            <div id="parameters">
+                <div id="titleParameters">Parameters</div>
+                <div id="loadImage">
+                    <div id="loadImageDecal">
+                        <input id="load_input" type="file">
+                    </div>
+                </div>
+                <br>
+                <div class="separateFirst"><div class="separateSecond"><div class="separateThird"></div></div></div>
+                <br>
+                <div id="contentParameters">
+                Choix de l'image en cours: 
+                <select id="imageSelect">
+                    <option value="null">Aucune</option>
+                </select>
+                </div>
+                <br>
+                <div class="separateFirst"><div class="separateSecond"><div class="separateThird"></div></div></div>
+                <br>
+            </div>
+            
+        </div>
+        
+    </div>
+    
+    <!-- Pied de page -->
+    <div id="footer">
+        <h1 id="names">Mathieu HARHARIDIS - Maxime HELAINE - Maxime LAYAHE - Alexandre RIVET</h1>
+    </div>
+        
+</body>
 
 </html>
