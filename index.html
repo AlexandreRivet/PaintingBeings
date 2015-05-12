@@ -19,50 +19,45 @@
     
 <body>
     
-    <!-- Entête -->
-    <div id="header">
-        <h1 id="title">PAINTING BEINGS</h1>
+    <div id="render_panel">
+        <canvas id="canvas">Your browser seems to not support canvas html.</canvas>
     </div>
     
-    <!-- Contenu central avec la zone de dessin et la zone de paramétrages -->
-    <div id="content">
-        
-        <div id="middlePanel">
-        
-            <div id="drawingArea">
-                <canvas id="webgl_canvas">Your browser seems to not support canvas hmtl.</canvas>
-            </div>
-        
-            <div id="parameters">
-                <div id="titleParameters">Parameters</div>
-                <div id="loadImage">
-                    <div id="loadImageDecal">
-                        <input id="load_input" type="file">
+    <div id="header">
+        <div id="header_title"><h1>Blob paintings | Mathieu H. - Maxime H. - Maxime L. - Alexandre R.</h1></div>
+        <div id="header_whatisthis"><img id="header_whatisthis_img" src="images/question.png"></div>
+    </div>
+    
+    <div id="left_panel">
+        <div id="left_panel_upload">
+            <div class="extended_panel">
+                <div id="upload_area">
+                    <input class="input-file" id="my-file" type="file">
+                    <div id="upload_area_content">
+                        <label for="my-file" class="input-file-trigger" tabindex="0">Select a file</label>
+                        <img id="upload_area_content_img" src="images/low.png"/>
                     </div>
                 </div>
-                <br>
-                <div class="separateFirst"><div class="separateSecond"><div class="separateThird"></div></div></div>
-                <br>
-                <div id="contentParameters">
-                Choix de l'image en cours: 
-                <select id="imageSelect">
-                    <option value="null">Aucune</option>
-                </select>
-                </div>
-                <br>
-                <div class="separateFirst"><div class="separateSecond"><div class="separateThird"></div></div></div>
-                <br>
             </div>
-            
+            <div class="icon"><img class="img_panel" src="images/file.png"/></div>
         </div>
+        <div id="left_panel_parameters">
+            <div class="extended_panel">
+                <div id="gallery">
+                    <div id="gallery_content">
+                        <div id="gallery_slider"></div>
+                    </div>
+                </div>
+                <div id="parameters">
+                    <div id="parameters_content"></div>
+                </div>
+            </div>
+            <div class="icon"><img class="img_panel" src="images/gear.png"/></div>
         
+        </div>
     </div>
     
-    <!-- Pied de page -->
-    <div id="footer">
-        <h1 id="names">Mathieu HARHARIDIS - Maxime HELAINE - Maxime LAYAHE - Alexandre RIVET</h1>
-    </div>
-        
+    <div id="right_panel"></div>
 </body>
 
 </html>
