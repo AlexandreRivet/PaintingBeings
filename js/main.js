@@ -4,6 +4,9 @@ var IMAGES = {};
 var CURRENT_IMAGE = "";
 var STATS = null;
 
+var TEXTURE = null;
+var MATERIAL = null;
+
 $(document).ready(function () {
     'use strict';
    
@@ -13,17 +16,19 @@ $(document).ready(function () {
 
 function saveFiles(files)
 {
+    debugger;
     type = undefined;
     for (i = 0; i < files.length; i += 1) {
         file = files[i];
         type = (file.type).split('/')[0];
         if (type !== "image") {
-            log("Le fichier '" + file.name + " n'est pas une image.", 'error');
+            log("Le fichier '" + file.name + "' n'est pas une image.", 'error');
             continue;
         }
         
         if (IMAGES[file.name] != undefined || IMAGES[file.name] != null) {
-            log("Le fichier '" + file.name + " a été remplacé.", 'info');
+            log("Le fichier '" + file.name + "' existe déjà.", 'info');
+            continue;
         }
                   
         IMAGES[file.name] = {"file": file, "image": null};
@@ -46,9 +51,7 @@ function saveImage(file) {
             
             $('#gallery_slider').append(IMAGES[file.name].image);
             
-            log("L'image '" + file.name + " a été chargée avec succès.", 'success');
-            
-            render();
+            log("L'image '" + file.name + "' a été chargée avec succès.", 'success');
         };
         image.src = e.target.result;
     };
@@ -127,13 +130,19 @@ function initInterface() {
     $("#my-file").change(function (event) {
         var files = event.target.files;
         saveFiles(files);
+        $(this).val('');
     });   
     
     $(document).on('click', '.photo', function(e) {
         var id = $(this).attr('id');
         CURRENT_IMAGE = id.substr(6);
-        console.log(CURRENT_IMAGE);
-        render();
+        
+        if (TEXTURE.image != IMAGES[CURRENT_IMAGE].image)
+        {
+            TEXTURE.image = IMAGES[CURRENT_IMAGE].image;
+            TEXTURE.sourceFile = CURRENT_IMAGE;
+            TEXTURE.needsUpdate = true;
+        }
     });
     
 }
@@ -148,9 +157,10 @@ function initScene()
     renderer.setClearColor(0x34495E);
     $("#render_panel").append(renderer.domElement);
 
-    var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    var material = new THREE.MeshBasicMaterial( { color: 0xF1C40F } );
-    var cube = new THREE.Mesh( geometry, material );
+    var geometry = new THREE.BoxGeometry( 3, 3, 3 );
+    TEXTURE = new THREE.Texture();
+    MATERIAL = new THREE.MeshBasicMaterial( { map: TEXTURE } );
+    var cube = new THREE.Mesh( geometry, MATERIAL );
     scene.add( cube );
 
     camera.position.z = 5;

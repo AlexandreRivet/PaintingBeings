@@ -68,6 +68,7 @@ body
     background-color: #22313f;
     border-top: 1px solid white;
     border-left: 1px solid white;
+    overflow: hidden;
 }
 
 #whatisthis
