@@ -15,12 +15,14 @@ function saveImage(file) {
     reader.onload = function (e) {
         var image = new Image();
         image.onload = function () {
-            console.log(image);
             IMAGES[file.name].image = this;
             IMAGES[file.name].image.size = {'w' : this.width, 'h' : this.height};
             IMAGES[file.name].image.id = 'photo_' + file.name;
             IMAGES[file.name].image.className = 'photo';
+            
             $('#gallery_slider').append(IMAGES[file.name].image);
+            
+            log("L'image '" + file.name + " a été chargée avec succès.", 'success');
             
             render();
         };
@@ -38,6 +40,17 @@ function initInterface() {
     
     $('.icon').click(function(e) {
         var parent = $(this).parent();
+        if (parent.hasClass('visible')) {
+            parent.removeClass('visible').addClass('hidden');
+        } else if (parent.hasClass('hidden')) {
+            parent.removeClass('hidden').addClass('visible');
+        } else {
+            parent.addClass('visible');
+        }
+    });
+    
+    $('#placement_icon_img, #right_panel_console_icon').click(function(e) {
+        var parent = $(this).parent().parent();
         if (parent.hasClass('visible')) {
             parent.removeClass('visible').addClass('hidden');
         } else if (parent.hasClass('hidden')) {
@@ -90,12 +103,12 @@ function initInterface() {
             file = files[i];
             type = (file.type).split('/')[0];
             if (type !== "image") {
-                alert("Le fichier " + file.name + " n'est pas une image.");
+                log("Le fichier '" + file.name + " n'est pas une image.", 'error');
                 continue;
             }
             
             if (IMAGES[file.name] != undefined || IMAGES[file.name] != null) {
-                alert("Le fichier va être remplacé.");
+                log("Le fichier '" + file.name + " a été remplacé.", 'info');
             }
                       
             IMAGES[file.name] = {"file": file, "image": null};
@@ -127,4 +140,34 @@ function render()
     finalPosition.y = ((canvas.height - 40) / 2) - (IMAGES[CURRENT_IMAGE].image.size.h / 2) + 40;
     
     ctx.drawImage(IMAGES[CURRENT_IMAGE].image, finalPosition.x, finalPosition.y);
+}
+
+function log(msg, className)
+{
+    var element = '<div>';
+    element += '<div class="' + className + ' console_date">' + formatDate() + '</div>';
+    element += '<div class="' + className + ' console_log">' + msg + '</div>';
+    element += '</div>';
+    
+    $('#console_area').append(element);
+    
+}
+
+function formatDate()
+{
+    var date = new Date();
+    
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var seconds = date.getSeconds();
+    var milliseconds = date.getMilliseconds();
+    
+    return ((day < 10) ? '0' + day : day) + '-' + ((month < 10) ? '0' + month : month) + '-' + year + ' ' +
+            ((hours < 10) ? '0' + hours : hours) + ':' + ((minutes < 10) ? '0' + minutes : minutes) + ':' +
+            ((seconds < 10) ? '0' + seconds : seconds) + '.' + 
+            ((milliseconds < 100) ? ((milliseconds < 10) ? '00' + milliseconds : '0' + milliseconds) : milliseconds); 
+    
 }

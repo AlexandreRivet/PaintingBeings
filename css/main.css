@@ -29,6 +29,7 @@
 
 body
 {
+    overflow: hidden;
     background-color:   #34495E;   
 }
 
@@ -50,7 +51,7 @@ body
 {
     position: absolute;
     top: 0%;
-    width: 55%;
+    width: 50%;
     height: 40px;
 }
 
@@ -61,34 +62,93 @@ body
     width: 85%;
     height: 100%;
     padding-left: 5px;
-    
+  
     color: white;
     letter-spacing: 1.0pt;
     background-color: #22313f;
+    border-top: 1px solid white;
+    border-left: 1px solid white;
 }
 
-#header_whatisthis
+#whatisthis
 {
     position: absolute;
+    left: 0px;
     right: 0px;
-    width: 12%;
+    margin: auto;
+    width: 1000px;
     height: 100%;
+    top: calc(40px - 100%);
+    
+    z-index: 10;
+}
+
+#whatisthis.visible
+{
+    top: -1px;
+    -webkit-animation-name: openwhatisthis; /* Chrome, Safari, Opera */
+    -webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
+    animation-name: openwhatisthis;
+    animation-duration: 1s;
+}
+
+#whatisthis.hidden
+{
+    top: calc(40px - 100%);
+    -webkit-animation-name: closewhatisthis; /* Chrome, Safari, Opera */
+    -webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
+    animation-name: closewhatisthis;
+    animation-duration: 1s;
+}
+
+#whatisthis_content
+{
+    position: relative;
+    width: 100%;
+    height: calc(100% - 40px);
+    top: 0px;
+    bottom: 0px;
+    
+    overflow: auto;
+}
+
+#whatisthis_content_img
+{
+    width: 100%;
+}
+
+#whatisthis_icon
+{
+    height: 40px;
+    width: 100%;
+    position: relative;
+    bottom: 0px;
+}
+
+#placement_icon_img
+{
+    position: absolute;
+    width: 100px;
+    height: 100%;
+    left: 0px;
+    right: 0px;
+    margin: auto;   
     
     background-color: #22313f;
+    cursor: pointer;
+    border-top: 1px solid white;
 }
 
-#header_whatisthis_img
+#whatisthis_icon_img
 {
     position: absolute;
+    width: 30px;
+    height: 30px;
     top: 0px;
     bottom: 0px;
     left: 0px;
     right: 0px;
-    width: 30px;
-    height: 30px;
-    
     margin: auto;
-    cursor: pointer;
 }
 
 #left_panel
@@ -279,6 +339,87 @@ body
     animation-duration: 1s;
 }
 
+#right_panel
+{
+    position: absolute;
+    bottom: 10%;
+    width: 40px;
+    height: 26%;
+    right: 1px;
+    
+    background-color: red;
+}
+
+#right_panel_console
+{
+    position: absolute;
+    bottom: 0px;
+    width: 500px;
+    height: 100%;
+    
+    background-color: #22313f;
+}
+
+#right_panel_console_icon
+{
+    border-left: none;
+    border-right: 1px solid white;    
+}
+
+#right_panel_console_content
+{
+    position: absolute;
+    width: 459px;
+    height: 100%;
+    right: 0px;
+}
+    
+#right_panel.hidden
+{
+    right: 1px;
+    -webkit-animation-name: closeconsole; /* Chrome, Safari, Opera */
+    -webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
+    animation-name: closeconsole;
+    animation-duration: 1s;
+}
+
+#right_panel.visible
+{
+    right: 460px;
+    -webkit-animation-name: openconsole; /* Chrome, Safari, Opera */
+    -webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
+    animation-name: opensole;
+    animation-duration: 1s;
+}
+
+#console_area
+{
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    
+    margin: 10px;
+    padding-left: 5px;
+    font-family: "Times New Roman", Times, sans-serif;
+    border: 2px solid white;
+    background-color: black;
+    overflow: auto;
+}
+
+.console_date
+{
+    width: 30%;
+    float: left;   
+}
+
+.console_log
+{
+    float: left;
+    width: 65%;
+}
+
 .img_panel
 {
     position: absolute;
@@ -294,6 +435,28 @@ body
 .dragover
 {
     background-color: #34495E;   
+}
+
+
+.btn_icon:hover,
+#placement_icon_img:hover
+{
+    background-color: #F1C40F;
+}
+
+.success
+{
+    color: green;   
+}
+
+.error
+{
+    color: red;
+}
+
+.info
+{
+    color: white;
 }
 
 /* Chrome, Safari, Opera */
@@ -321,8 +484,57 @@ body
     100% { right: 0px; }
 }
 
+/* Chrome, Safari, Opera */
+@-webkit-keyframes openconsole 
+{
+    0%   { right: 1px; }
+    100% { right: 460px; }
+}
+@-webkit-keyframes closeconsole 
+{
+    0%   { right: 460px; }
+    100% { right: 1px; }
+}
+
+/* Standard syntax */
+@keyframes openconsole 
+{
+    0%   { right: 1px; }
+    100% { right: 460px; }
+}
+
+@keyframes closeconsole 
+{
+    0%   { right: 460px; }
+    100% { right: 1px; }
+}
 
 
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes openwhatisthis 
+{
+    0%   { top: calc(40px - 100%); }
+    100% { top: -1px; }
+}
+@-webkit-keyframes closewhatisthis  
+{
+    0%   { top: -1px; }
+    100% { top: calc(40px - 100%); }
+}
+
+/* Standard syntax */
+@keyframes openwhatisthis  
+{
+    0%   { top: calc(40px - 100%); }
+    100% { top: -1px; }
+}
+
+@keyframes closewhatisthis  
+{
+    0%   { top: -1px; }
+    100% { top: calc(40px - 100%); }
+}
 
 
 ::-webkit-scrollbar-track
