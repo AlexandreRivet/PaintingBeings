@@ -2,12 +2,36 @@
 
 var IMAGES = {};
 var CURRENT_IMAGE = "";
+var STATS = null;
 
 $(document).ready(function () {
     'use strict';
    
     initInterface();
+    initScene();
 });
+
+function saveFiles(files)
+{
+    type = undefined;
+    for (i = 0; i < files.length; i += 1) {
+        file = files[i];
+        type = (file.type).split('/')[0];
+        if (type !== "image") {
+            log("Le fichier '" + file.name + " n'est pas une image.", 'error');
+            continue;
+        }
+        
+        if (IMAGES[file.name] != undefined || IMAGES[file.name] != null) {
+            log("Le fichier '" + file.name + " a été remplacé.", 'info');
+        }
+                  
+        IMAGES[file.name] = {"file": file, "image": null};
+        CURRENT_IMAGE = file.name;
+        
+        saveImage(file);
+    }
+}
 
 function saveImage(file) {
     'use strict';
@@ -34,10 +58,6 @@ function saveImage(file) {
 function initInterface() {
     'use strict';
     
-    var canvas = $("#canvas")[0];
-    canvas.width = $("#canvas").outerWidth();
-    canvas.height = $("#canvas").outerHeight();
-    
     $('.icon').click(function(e) {
         var parent = $(this).parent();
         if (parent.hasClass('visible')) {
@@ -49,7 +69,7 @@ function initInterface() {
         }
     });
     
-    $('#placement_icon_img, #right_panel_console_icon').click(function(e) {
+    $('#placement_icon_img, #right_panel_console_icon, #right_panel_stats_icon').click(function(e) {
         var parent = $(this).parent().parent();
         if (parent.hasClass('visible')) {
             parent.removeClass('visible').addClass('hidden');
@@ -59,6 +79,7 @@ function initInterface() {
             parent.addClass('visible');
         }
     });
+    
     
     $('body').on('dragover', function (event) {         
         event.preventDefault();
@@ -74,6 +95,7 @@ function initInterface() {
         event.preventDefault();
         event.stopPropagation();
     });
+    
     
     $('#upload_area').on('dragover', function (event) {
         event.preventDefault();
@@ -98,25 +120,14 @@ function initInterface() {
         $(this).removeClass('dragover');    
         
         files = event.originalEvent.dataTransfer.files;
-        type = undefined;
-        for (i = 0; i < files.length; i += 1) {
-            file = files[i];
-            type = (file.type).split('/')[0];
-            if (type !== "image") {
-                log("Le fichier '" + file.name + " n'est pas une image.", 'error');
-                continue;
-            }
-            
-            if (IMAGES[file.name] != undefined || IMAGES[file.name] != null) {
-                log("Le fichier '" + file.name + " a été remplacé.", 'info');
-            }
-                      
-            IMAGES[file.name] = {"file": file, "image": null};
-            CURRENT_IMAGE = file.name;
-            
-            saveImage(file);
-        }
-    });    
+        saveFiles(files);
+        
+    });
+    
+    $("#my-file").change(function (event) {
+        var files = event.target.files;
+        saveFiles(files);
+    });   
     
     $(document).on('click', '.photo', function(e) {
         var id = $(this).attr('id');
@@ -127,19 +138,39 @@ function initInterface() {
     
 }
 
-
-function render()
+function initScene()
 {
-    var canvas = $("#canvas")[0];
-    var ctx = canvas.getContext('2d');
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setClearColor(0x34495E);
+    $("#render_panel").append(renderer.domElement);
+
+    var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+    var material = new THREE.MeshBasicMaterial( { color: 0xF1C40F } );
+    var cube = new THREE.Mesh( geometry, material );
+    scene.add( cube );
+
+    camera.position.z = 5;
+
+    STATS = new Stats();
+    STATS.domElement.style.position = 'absolute';
+    STATS.domElement.style.top = '0px';
+    $("#stats_area").append(STATS.domElement);
     
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    var finalPosition = {'w': 0, 'h': 0};
-    finalPosition.x = ((canvas.width - 40) / 2) - (IMAGES[CURRENT_IMAGE].image.size.w / 2) + 40;
-    finalPosition.y = ((canvas.height - 40) / 2) - (IMAGES[CURRENT_IMAGE].image.size.h / 2) + 40;
-    
-    ctx.drawImage(IMAGES[CURRENT_IMAGE].image, finalPosition.x, finalPosition.y);
+    var render = function () {
+        requestAnimationFrame( render );
+
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+
+        renderer.render(scene, camera);
+        STATS.update();
+    };
+
+    render();    
 }
 
 function log(msg, className)
