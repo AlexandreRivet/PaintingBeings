@@ -178,7 +178,7 @@ body
     top: 0px;
     bottom: 0px;
     left: 0px;
-    right: 40px;
+    width: calc(50% - 40px);
     
     margin: 10px;
     cursor: pointer;
@@ -226,6 +226,20 @@ body
     cursor: pointer;
     z-index: 2; 
 }  
+
+#webcam
+{
+    position: absolute;    
+    top: 0px;    
+    bottom: 0px;
+    right: 40px; 
+    width: calc(50% - 40px);
+    
+    margin: 10px;    
+    cursor: pointer;    
+    border: 2px dashed white;
+}
+
 
 .extended_panel
 {

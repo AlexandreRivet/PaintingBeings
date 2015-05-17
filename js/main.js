@@ -7,6 +7,8 @@ var STATS = null;
 var TEXTURE = null;
 var MATERIAL = null;
 
+var SNAP_COUNT = 0;
+
 $(document).ready(function () {
     'use strict';
    
@@ -16,7 +18,6 @@ $(document).ready(function () {
 
 function saveFiles(files)
 {
-    debugger;
     type = undefined;
     for (i = 0; i < files.length; i += 1) {
         file = files[i];
@@ -49,7 +50,7 @@ function saveImage(file) {
             IMAGES[file.name].image.id = 'photo_' + file.name;
             IMAGES[file.name].image.className = 'photo';
             
-            $('#gallery_slider').append(IMAGES[file.name].image);
+            
             
             log("L'image '" + file.name + "' a été chargée avec succès.", 'success');
         };
@@ -61,7 +62,27 @@ function saveImage(file) {
 function initInterface() {
     'use strict';
     
-    Webcam.attach("#test_webcam");
+    Webcam.set({
+        width: $('#webcam').innerWidth(),
+        height: $('#webcam').innerHeight(),
+    });
+    
+    Webcam.attach("#webcam");
+    
+    $("#webcam").click(function() {
+        Webcam.snap(function(data) {
+            var img = new Image();
+            img.src = data;
+            img.id = 'photo_' + 'snap_' + SNAP_COUNT;
+            img.className = 'photo';
+            
+            IMAGES['snap_' + SNAP_COUNT] =  {"file": null, "image": img};
+            
+            $('#gallery_slider').append(IMAGES['snap_' + SNAP_COUNT].image);
+            
+            SNAP_COUNT++;            
+        });
+    });
     
     $('.icon').click(function(e) {
         var parent = $(this).parent();
