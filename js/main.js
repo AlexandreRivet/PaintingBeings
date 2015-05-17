@@ -61,6 +61,8 @@ function saveImage(file) {
 function initInterface() {
     'use strict';
     
+    Webcam.attach("#test_webcam");
+    
     $('.icon').click(function(e) {
         var parent = $(this).parent();
         if (parent.hasClass('visible')) {
