@@ -88,8 +88,12 @@ function initInterface() {
         var parent = $(this).parent();
         if (parent.hasClass('visible')) {
             parent.removeClass('visible').addClass('hidden');
+             
+            Webcam.reset();
         } else if (parent.hasClass('hidden')) {
             parent.removeClass('hidden').addClass('visible');
+            
+            Webcam.attach("#webcam");
         } else {
             parent.addClass('visible');
         }
