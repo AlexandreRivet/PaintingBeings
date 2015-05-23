@@ -67,8 +67,6 @@ function initInterface() {
         height: $('#webcam').innerHeight(),
     });
     
-    Webcam.attach("#webcam");
-    
     $("#webcam").click(function() {
         Webcam.snap(function(data) {
             var img = new Image();
@@ -86,16 +84,23 @@ function initInterface() {
     
     $('.icon').click(function(e) {
         var parent = $(this).parent();
+        var id = parent.attr('id');
+        console.log(parent.attr('id'));
         if (parent.hasClass('visible')) {
             parent.removeClass('visible').addClass('hidden');
              
-            Webcam.reset();
+            if (id == "left_panel_upload")
+                Webcam.reset();
         } else if (parent.hasClass('hidden')) {
             parent.removeClass('hidden').addClass('visible');
             
-            Webcam.attach("#webcam");
+            if (id == "left_panel_upload")
+                Webcam.attach("#webcam");
         } else {
             parent.addClass('visible');
+            
+            if (id == "left_panel_upload")
+                Webcam.attach("#webcam");
         }
     });
     
