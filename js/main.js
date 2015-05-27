@@ -9,8 +9,13 @@ var MATERIAL = null;
 
 var SNAP_COUNT = 0;
 
+var BEGIN_APPLICATION = 0;
+var TIME_APPLICATION = 0;
+
 $(document).ready(function () {
     'use strict';
+    
+    BEGIN_APPLICATION = new Date().getTime();
    
     initInterface();
     initScene();
@@ -50,7 +55,7 @@ function saveImage(file) {
             IMAGES[file.name].image.id = 'photo_' + file.name;
             IMAGES[file.name].image.className = 'photo';
             
-            
+            $('#gallery_slider').append(IMAGES[file.name].image);
             
             log("L'image '" + file.name + "' a été chargée avec succès.", 'success');
         };
@@ -85,7 +90,6 @@ function initInterface() {
     $('.icon').click(function(e) {
         var parent = $(this).parent();
         var id = parent.attr('id');
-        console.log(parent.attr('id'));
         if (parent.hasClass('visible')) {
             parent.removeClass('visible').addClass('hidden');
              
@@ -189,9 +193,11 @@ function initScene()
     renderer.setClearColor(0x34495E);
     $("#render_panel").append(renderer.domElement);
 
-    var geometry = new THREE.BoxGeometry( 3, 3, 3 );
+    var geometry = new THREE.PlaneGeometry( 3, 3);
     TEXTURE = new THREE.Texture();
-    MATERIAL = new THREE.MeshBasicMaterial( { map: TEXTURE } );
+    // MATERIAL = new THREE.MeshBasicMaterial( { map: TEXTURE } );
+    MATERIAL = new THREE.ShaderMaterial({uniforms: BlobShader.uniforms, vertexShader: BlobShader.vertexShader, fragmentShader: BlobShader.fragmentShader});
+    MATERIAL.uniforms["uSampler"].value = TEXTURE;
     var cube = new THREE.Mesh( geometry, MATERIAL );
     scene.add( cube );
 
@@ -204,6 +210,9 @@ function initScene()
     
     var render = function () {
         requestAnimationFrame( render );
+        
+        TIME_APPLICATION = (new Date().getTime()) - BEGIN_APPLICATION;
+        MATERIAL.uniforms["uTime"].value += 1.0;
 
         cube.rotation.x += 0.01;
         cube.rotation.y += 0.01;
