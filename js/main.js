@@ -64,6 +64,34 @@ function saveImage(file) {
     reader.readAsDataURL(file);
 }
 
+function getImageData( image ) {
+
+    var canvas = document.createElement( 'canvas' );
+    canvas.width = image.width;
+    canvas.height = image.height;
+
+    var context = canvas.getContext( '2d' );
+    context.drawImage( image, 0, 0 );
+
+    return context.getImageData( 0, 0, image.width, image.height );
+
+}
+
+function getPixel( imagedata, x, y ) {
+
+    var position = ( x + imagedata.width * y ) * 4, data = imagedata.data;
+    return { r: data[ position ], g: data[ position + 1 ], b: data[ position + 2 ], a: data[ position + 3 ] };
+
+}
+
+/*
+function processImageToFloatArray(){
+    var imagedata = getImageData( imgTexture.image );
+    var color = getPixel( imagedata, 10, 10 );
+    return color;
+}
+*/
+
 function initInterface() {
     'use strict';
     
@@ -179,6 +207,10 @@ function initInterface() {
             TEXTURE.sourceFile = CURRENT_IMAGE;
             TEXTURE.needsUpdate = true;
         }
+        
+        var imagedata = getImageData( TEXTURE.image );
+        var color = getPixel( imagedata, 10, 10 );
+        log("R: "+ color.r + " G: "+ color.g + " B: " + color.b + " A: "+color.a, 'info');
     });
     
 }
@@ -219,8 +251,9 @@ function initScene()
 
         renderer.render(scene, camera);
         STATS.update();
-    };
+    };  
 
+    
     render();    
 }
 
