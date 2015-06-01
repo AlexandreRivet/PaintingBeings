@@ -193,15 +193,33 @@ function initScene()
     renderer.setClearColor(0x34495E);
     $("#render_panel").append(renderer.domElement);
 
-    var geometry = new THREE.PlaneGeometry( 3, 3);
-    TEXTURE = new THREE.Texture();
-    // MATERIAL = new THREE.MeshBasicMaterial( { map: TEXTURE } );
-    MATERIAL = new THREE.ShaderMaterial({uniforms: BlobShader.uniforms, vertexShader: BlobShader.vertexShader, fragmentShader: BlobShader.fragmentShader});
-    MATERIAL.uniforms["uSampler"].value = TEXTURE;
-    var cube = new THREE.Mesh( geometry, MATERIAL );
-    scene.add( cube );
-
-    camera.position.z = 5;
+    var geometry = new THREE.IcosahedronGeometry(10, 2);
+    // var material = new THREE.MeshBasicMaterial();
+    MATERIAL = new THREE.ShaderMaterial({uniforms: BlobShader.uniforms, vertexShader: document.getElementById('vertexShader').textContent, fragmentShader: document.getElementById('fragmentShader').textContent});
+    
+    for (var i = 0; i < 25; i++)
+    {
+        for (var j = 0; j < 25; j++)
+        {
+            var object = new THREE.Mesh(geometry, MATERIAL);
+            
+            object.position.x = -125 + j * 10;
+            object.position.y = -125 + i * 10;
+            
+            scene.add(object);
+        }
+        
+        
+        /*var geometry = new THREE.IcosahedronGeometry(20, 4);
+        TEXTURE = new THREE.Texture();
+        MATERIAL = new THREE.ShaderMaterial({uniforms: BlobShader.uniforms, vertexShader: document.getElementById('vertexShader').textContent, fragmentShader: document.getElementById('fragmentShader').textContent});
+        MATERIAL.uniforms["uSampler"].value = TEXTURE;
+        var cube = new THREE.Mesh( geometry, MATERIAL );
+        cube.position.x = -100 + i * 25;
+        scene.add( cube );*/
+    }
+    
+    camera.position.z = 200;
 
     STATS = new Stats();
     STATS.domElement.style.position = 'absolute';
@@ -211,12 +229,9 @@ function initScene()
     var render = function () {
         requestAnimationFrame( render );
         
-        TIME_APPLICATION = (new Date().getTime()) - BEGIN_APPLICATION;
-        MATERIAL.uniforms["uTime"].value += 1.0;
-
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
-
+        TIME_APPLICATION = 0.00050 * ( (new Date().getTime()) - BEGIN_APPLICATION );
+        MATERIAL.uniforms["uTime"].value = TIME_APPLICATION;
+        
         renderer.render(scene, camera);
         STATS.update();
     };
