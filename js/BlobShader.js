@@ -37,7 +37,7 @@ var BlobShader = {
         "void main() {",
         
             "vec4 color = texture2D(uSampler, vTextCoord);",
-            "gl_FragColor = color + vec4(sin(uTime), cos(uTime), 0.0, 1.0);",
+            "gl_FragColor = color;",
         
         "}"
     
