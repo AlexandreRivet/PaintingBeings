@@ -192,11 +192,13 @@ function initScene()
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.setClearColor(0x34495E);
     $("#render_panel").append(renderer.domElement);
+    
+    GenAlgo();
 
     var geometry = new THREE.PlaneGeometry( 3, 3);
     TEXTURE = new THREE.Texture();
     // MATERIAL = new THREE.MeshBasicMaterial( { map: TEXTURE } );
-    MATERIAL = new THREE.ShaderMaterial({uniforms: BlobShader.uniforms, vertexShader: BlobShader.vertexShader, fragmentShader: BlobShader.fragmentShader});
+    MATERIAL = new THREE.ShaderMaterial({uniforms: BlobShader.uniforms, vertexShader:                       BlobShader.vertexShader, fragmentShader: BlobShader.fragmentShader});
     MATERIAL.uniforms["uSampler"].value = TEXTURE;
     var cube = new THREE.Mesh( geometry, MATERIAL );
     scene.add( cube );
@@ -216,6 +218,8 @@ function initScene()
 
         cube.rotation.x += 0.01;
         cube.rotation.y += 0.01;
+        
+        nextPopulation();
 
         renderer.render(scene, camera);
         STATS.update();
