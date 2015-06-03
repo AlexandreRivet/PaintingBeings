@@ -92,6 +92,19 @@ function processImageToFloatArray(){
 }
 */
 
+
+function generatePixelsColorArray( TEXTURE_PARAM){
+    var imagedata = getImageData( TEXTURE_PARAM.image );
+    var colorTableArray = new Array();
+    for(var i = 0; i<imagedata.width ; ++i){
+        /*if(!check(colorTableArray[i]))*/ colorTableArray[i] = new Array();
+        for(var j = 0; j<imagedata.height ; ++j){
+            pixelsColorArray[i][j] = getPixel(imagedata, i, j);
+        }
+    }
+    return pixelsColorArray;
+}
+
 function initInterface() {
     'use strict';
     
@@ -207,10 +220,11 @@ function initInterface() {
             TEXTURE.sourceFile = CURRENT_IMAGE;
             TEXTURE.needsUpdate = true;
         }
-        
+        debugger;
         var imagedata = getImageData( TEXTURE.image );
-        var color = getPixel( imagedata, 10, 10 );
-        log("R: "+ color.r + " G: "+ color.g + " B: " + color.b + " A: "+color.a, 'info');
+        var pixelsColorArray = generatePixelsColorArray(TEXTURE);
+        var color = pixelsColorArray[10][10];
+        log("R: "+ color.r + " G: "+ color.g + " B: " + color.b + " A: "+color.a, 'info');   
     });
     
 }
@@ -252,8 +266,6 @@ function initScene()
         renderer.render(scene, camera);
         STATS.update();
     };  
-
-    
     render();    
 }
 
