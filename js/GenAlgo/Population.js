@@ -1,8 +1,5 @@
 var populationNbr = 50;
-var percentBest = Math.floor(populationNbr* 10 / 100);
-var percentCrossed = Math.floor(populationNbr* 10 / 100);
-var percentMutate = Math.floor(populationNbr* 10 / 100);
-var percentRandom = populationNbr - percentBest - percentCrossed - percentMutate;
+
 function Population() 
 {
     this.blobImages = new Array();
