@@ -115,6 +115,7 @@ function saveImage(file) {
         var image = new Image();
         image.onload = function () {
             IMAGES[file.name].image = this;
+            log("Largeur : "+this.width+", Hauteur : "+ this.height,'info');
             IMAGES[file.name].image.size = {'w' : this.width, 'h' : this.height};
             IMAGES[file.name].image.id = 'photo_' + file.name;
             IMAGES[file.name].image.className = 'photo';
@@ -128,3 +129,43 @@ function saveImage(file) {
     reader.readAsDataURL(file);
 }
 
+function getImageData( image ) {
+
+    var canvas = document.createElement( 'canvas' );
+    canvas.width = image.width;
+    canvas.height = image.height;
+
+    var context = canvas.getContext( '2d' );
+    context.drawImage( image, 0, 0 );
+
+    return context.getImageData( 0, 0, image.width, image.height );
+
+}
+
+function getPixel( imagedata, x, y ) {
+
+    var position = ( x + imagedata.width * y ) * 4, data = imagedata.data;
+    return { r: data[ position ], g: data[ position + 1 ], b: data[ position + 2 ], a: data[ position + 3 ] };
+
+}
+
+/*
+function processImageToFloatArray(){
+    var imagedata = getImageData( imgTexture.image );
+    var color = getPixel( imagedata, 10, 10 );
+    return color;
+}
+*/
+
+
+function generatePixelsColorArray( TEXTURE_PARAM){
+    var imagedata = getImageData( TEXTURE_PARAM.image );
+    pixelsColorArray = new Array();
+    for(var i = 0; i<imagedata.width ; ++i){
+        /*if(!check(colorTableArray[i]))*/ pixelsColorArray[i] = new Array();
+        for(var j = 0; j<imagedata.height ; ++j){
+            pixelsColorArray[i][j] = getPixel(imagedata, i, j);
+        }
+    }
+    return pixelsColorArray;
+}

@@ -121,6 +121,14 @@ function initInterface() {
         
         // Ici faire le traitement de l'image et envoyer au thread
         
+        /*
+         //debugger;
+        var imagedata = getImageData( TEXTURE.image );
+        pixelsColorArray = generatePixelsColorArray(TEXTURE);
+        var color = pixelsColorArray[10][10];
+        log("R: "+ color.r + " G: "+ color.g + " B: " + color.b + " A: "+color.a, 'info');
+        log("Width: " + imagedata.width + " Height : "+ imagedata.height, 'info');
+        */
     });
     
 }
