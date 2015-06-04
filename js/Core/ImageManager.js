@@ -62,7 +62,7 @@ CustomTexture.prototype.getColorAtPosition = function(row, col)
 
 CustomTexture.prototype.setColorAtIndex = function(index, color)
 {
-    var row = Math.floor(index / this.mHeight);
+    var row = Math.floor(index / this.mWidth);
     var col = index % this.mWidth;
     this.setColorAtPosition(row, col, color);
 }

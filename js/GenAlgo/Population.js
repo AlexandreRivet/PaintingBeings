@@ -1,5 +1,4 @@
-
-var populationNbr = 100;
+var populationNbr = 50;
 
 function Population() 
 {
@@ -8,55 +7,35 @@ function Population()
 
 Population.prototype = {
     
-    randomInit : function(size) {
-        for ( var i = 0; i < populationNbr ; ++i) {
-            var blobImage = new BlobImage(size);
-            this.blobImages.push(blobImage);
-        }
+    randomInit : function(size) 
+    {
+        
+        for ( var i = 0; i < populationNbr ; ++i) 
+            this.blobImages.push(new BlobImage(size));
         
     },
     
-    evaluate : function(image) {
-    
-        // console.log("Avant evaluate");
+    evaluate : function(image) 
+    {
         
-        //Evaluate and sort the array
-        for(var i = 0; i < populationNbr ; ++i) {
-            // console.log("Blob image fitness " + i );
-            // console.log(this.blobImages[i].fitness);
+        for(var i = 0; i < populationNbr ; ++i) 
             this.blobImages[i].evaluate(image);
-        }
-        
-        // console.log("Après evaluate");
-        //Evaluate and sort the array
-        //for(var i = 0; i < populationNbr ; ++i) {
-            // console.log("Blob image fitness " + i );
-        //    console.log(this.blobImages[i].fitness);
-        //}
-        
-        // console.log("Avant sort");
-        
+
         this.blobImages.sort(function(blobIA, blobIB) {
             return (blobIA.fitness - blobIB.fitness);
         });
         
-        // console.log("Après sort");
-        
-        //for (var i = 0; i < this.blobImages.length - 1; i++)
-        //{
-            //console.log(this.blobImages[i].fitness);
-            //if (this.blobImages[i + 1].fitness < this.blobImages[i].fitness)
-                //console.log("COCK");
-        //}
     },
     
     clone: function()
     {
+        
         var newPopulation = new Population();
         for (var i = 0; i < this.blobImages.length; i++)
             newPopulation.blobImages.push(this.blobImages[i].clone());
         
         return newPopulation;
+        
     }
     
 }
