@@ -25,7 +25,15 @@ BlobImage.prototype = {
         for (var i = 0; i < this.blobNumber ; ++i) {
             var index = Math.floor((Math.random() * 2));
             if(index)
-                this.blobs[i] = another.blobs[i];      
+            {
+                var b_tmp = new Blob();
+                b_tmp.size = another.blobs[i].size;
+                b_tmp.color = new Array();
+                b_tmp.color.push(another.blobs[i].color[0]);
+                b_tmp.color.push(another.blobs[i].color[1]);
+                b_tmp.color.push(another.blobs[i].color[2]);
+                this.blobs[i] = b_tmp;
+            }
         }
         
     },
@@ -50,8 +58,6 @@ BlobImage.prototype = {
                 this.fitness += this.blobs[(i * image[i].length) + j].evaluate(image[i][j]);
             }
         }
-        
-        // this.fitness /= this.blobNumber;
         
         // console.log(this.fitness);
         

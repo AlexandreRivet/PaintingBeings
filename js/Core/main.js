@@ -1,4 +1,6 @@
 /*global $, console, alert, FileReader */
+var TMP_DATA;
+
 
 $(document).ready(function () {
     'use strict';
@@ -7,7 +9,7 @@ $(document).ready(function () {
    
     initInterface();
     initScene();
-    startThread();
+    // startThread();
 });
 
 
@@ -122,7 +124,13 @@ function initInterface() {
         
         pixelsColorArray = generatePixelsColorArray(IMAGES[CURRENT_IMAGE].naturalImage);
         
-        var data = imageToJSON(pixelsColorArray);
+        // var data = imageToJSON(pixelsColorArray);
+        //TMP_DATA = imageToJSON(pixelsColorArray);
+        TMP_DATA = pixelsColorArray;
+        
+        GenAlgo(TMP_DATA);
+        
+        runAlgo();
         
         THREAD.postMessage(data);
     });
@@ -198,5 +206,12 @@ function startThread()
         console.warn('Worker are not available in your browser. Download one who supports this epic technology.');   
     }
     
+}
+
+function runAlgo()
+{
+    nextPopulation(TMP_DATA);
+    
+    setTimeout("runAlgo()", 1000);
 }
 
