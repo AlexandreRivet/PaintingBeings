@@ -159,7 +159,7 @@ function initScene()
         STATS.update();
     };
     
-    log('Scene inialised.', 'info');
+    log('Scene initialised.', 'info');
 
     render();    
 }
@@ -177,12 +177,8 @@ function startThread()
             var data = event.data;
             var blobs = data.blobs;
             
-            // debugger;
-            
-            //var width = IMAGES[CURRENT_IMAGE].image.size.w;
-            //var height = IMAGES[CURRENT_IMAGE].image.size.h;
-            var width = 2;
-            var height = 2;
+            var width = IMAGES[CURRENT_IMAGE].image.size.w;
+            var height = IMAGES[CURRENT_IMAGE].image.size.h;
             
             var ct = new CustomTexture(width, height);
             
