@@ -12,6 +12,8 @@ var SNAP_COUNT = 0;
 var BEGIN_APPLICATION = 0;
 var TIME_APPLICATION = 0;
 
+var pixelsColorArray;
+
 $(document).ready(function () {
     'use strict';
     
@@ -95,7 +97,7 @@ function processImageToFloatArray(){
 
 function generatePixelsColorArray( TEXTURE_PARAM){
     var imagedata = getImageData( TEXTURE_PARAM.image );
-    var pixelsColorArray = new Array();
+    pixelsColorArray = new Array();
     for(var i = 0; i<imagedata.width ; ++i){
         /*if(!check(colorTableArray[i]))*/ pixelsColorArray[i] = new Array();
         for(var j = 0; j<imagedata.height ; ++j){
@@ -222,7 +224,7 @@ function initInterface() {
         }
         //debugger;
         var imagedata = getImageData( TEXTURE.image );
-        var pixelsColorArray = generatePixelsColorArray(TEXTURE);
+        pixelsColorArray = generatePixelsColorArray(TEXTURE);
         var color = pixelsColorArray[10][10];
         log("R: "+ color.r + " G: "+ color.g + " B: " + color.b + " A: "+color.a, 'info');   
     });
