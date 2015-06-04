@@ -16,9 +16,22 @@ Population.prototype = {
         
     },
     
-    evaluate : function() {
+    evaluate : function(image) {
         //Evaluate and sort the array
+        for(var i = 0; i < populationNbr ; ++i) {
+            this.blobImages[i].evaluate(image);
+        }
         
+        this.blobImages.sort(function(blobIA, blobIB) {
+            
+            if(blobIA.fitness < blobIB.fitness)
+                return 1;
+            else if(blobIA.fitness > blobIB.fitness)
+                return -1;
+            else
+                return 0;
+            
+        });
     }
     
 }

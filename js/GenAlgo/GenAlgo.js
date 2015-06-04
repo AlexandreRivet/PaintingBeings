@@ -1,16 +1,15 @@
 var currentPopulation;
 //var lastPopulation;
-var currentImage;
 
-function GenAlgo() {
+function GenAlgo(currentImage) {
      
         currentPopulation = new Population();
         currentPopulation.randomInit();
-        currentPopulation.evaluate();
+        currentPopulation.evaluate(currentImage);
         
 }
 
-function nextPopulation() {
+function nextPopulation(currentImage) {
     
     //lastPopulation = currentPopulation;
     
@@ -29,5 +28,5 @@ function nextPopulation() {
         currentPopulation.blobImages[i] = new BlobImage();
     }
     
-    currentPopulation.evaluate();
+    currentPopulation.evaluate(currentImage);
 }
