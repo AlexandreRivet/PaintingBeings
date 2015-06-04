@@ -16,14 +16,9 @@ Population.prototype = {
         
     },
     
-    select : function() {
-        
-        
-        
-    },
-    
     evaluate : function() {
-           //Evaluate and sort the array
+        //Evaluate and sort the array
+        
     }
     
 }

@@ -1,5 +1,6 @@
 var currentPopulation;
-var lastPopulation;
+//var lastPopulation;
+var currentImage;
 
 function GenAlgo() {
      
@@ -11,7 +12,7 @@ function GenAlgo() {
 
 function nextPopulation() {
     
-    lastPopulation = currentPopulation;
+    //lastPopulation = currentPopulation;
     
     //CrossOver
     for (var i = 11 ; i < 44 ; ++i) {

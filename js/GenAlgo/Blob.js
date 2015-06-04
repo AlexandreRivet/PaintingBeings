@@ -18,6 +18,12 @@ Blob.prototype = {
         var colorIndex = Math.floor((Math.random() * 3));
         this.color[colorIndex] = Math.floor((Math.random() * 255));
         
+    },
+    
+    evaluate : function(pixelColor) {
+    
+        
+        
     }
     
 }

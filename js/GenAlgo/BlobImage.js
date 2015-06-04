@@ -33,6 +33,12 @@ BlobImage.prototype = {
             this.blobs[randomIndex].mutate();
         }
         
+    },
+    
+    evaluate : function() {
+        
+        
+        
     }
     
 }
