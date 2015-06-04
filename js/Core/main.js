@@ -148,7 +148,32 @@ function initScene()
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.setClearColor(0x34495E);
     $("#render_panel").append(renderer.domElement);
-
+    /*
+    var nbBlobs = 4096;
+    
+    var model = new THREE.IcosahedronGeometry(20, 2);
+    var geometry = new THREE.BufferGeometry();
+    var vertices = new THREE.BufferAttribute(new Float32Array(nbBlobs * model.faces.length * 3 * 3), 3);
+    
+    var index = 0, localPosition;
+    for (var i = 0; i < nbBlobs; i++)
+    {
+        for (var j = 0; j < model.faces.length; j++)
+        {
+            localPosition = model.vertices[model.faces[j].a];
+            vertices.push(
+            index++;    
+            
+            index++;
+            
+            index++;
+        }
+    }
+    */
+    
+    
+    
+    
     camera.position.z = 1000;
 
     STATS = new Stats();
