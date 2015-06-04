@@ -173,21 +173,24 @@ function startThread()
             THREAD = new Worker('js/WebWorker/GenAlgoWorker.js');
         }
         THREAD.onmessage = function(event) 
-        {    
+        {   
             var data = event.data;
             var blobs = data.blobs;
             
             var width = IMAGES[CURRENT_IMAGE].image.size.w;
             var height = IMAGES[CURRENT_IMAGE].image.size.h;
             
-            var ct = new CustomTexture(width, height);
+            if ( (!check(GEN_ALGO_TEXTURE)) || (GEN_ALGO_TEXTURE.mWidth != width) || (GEN_ALGO_TEXTURE.mHeight != height))
+            {
+                GEN_ALGO_TEXTURE = new CustomTexture(width, height);
+            }
             
             for (var i = 0; i < blobs.length; i++)
             {
-                ct.setColorAtIndex(i, blobs[i].color);
+                GEN_ALGO_TEXTURE.setColorAtIndex(i, blobs[i].color);
             }
-            ct.convertToImage();
-            $("#algoImage").html(ct.mImage);
+            // ct.convertToImage();
+            $("#algoImage").html(GEN_ALGO_TEXTURE.mCanvas);
         };
     } 
     else 
