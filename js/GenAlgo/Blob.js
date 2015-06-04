@@ -25,7 +25,7 @@ Blob.prototype = {
         var diffG = Math.abs(this.color[1] - pixelColor.g);
         var diffB = Math.abs(this.color[2] - pixelColor.b);
         
-        return diffR + diffG + diffB;
+        return (diffR + diffG + diffB) / 3;
     }
     
 }

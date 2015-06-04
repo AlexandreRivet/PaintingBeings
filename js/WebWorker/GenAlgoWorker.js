@@ -21,7 +21,7 @@ function main()
     }
     
     // Relance de la fonction
-    setTimeout("main()", 1000);
+    setTimeout("main()", 500);
 }
 
 self.addEventListener('message', function(e) {

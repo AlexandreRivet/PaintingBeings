@@ -19,6 +19,7 @@ Population.prototype = {
     evaluate : function(image) {
         //Evaluate and sort the array
         for(var i = 0; i < populationNbr ; ++i) {
+            // console.log("Blob image fitness " + i );
             this.blobImages[i].evaluate(image);
         }
         

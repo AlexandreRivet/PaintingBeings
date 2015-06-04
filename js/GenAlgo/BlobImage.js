@@ -49,6 +49,10 @@ BlobImage.prototype = {
             }
         }
         
+        // this.fitness /= this.blobNumber;
+        
+        // console.log(this.fitness);
+        
     }
     
 }
