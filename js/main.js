@@ -53,6 +53,7 @@ function saveImage(file) {
         var image = new Image();
         image.onload = function () {
             IMAGES[file.name].image = this;
+            log("Largeur : "+this.width+", Hauteur : "+ this.height,'info');
             IMAGES[file.name].image.size = {'w' : this.width, 'h' : this.height};
             IMAGES[file.name].image.id = 'photo_' + file.name;
             IMAGES[file.name].image.className = 'photo';
@@ -226,7 +227,8 @@ function initInterface() {
         var imagedata = getImageData( TEXTURE.image );
         pixelsColorArray = generatePixelsColorArray(TEXTURE);
         var color = pixelsColorArray[10][10];
-        log("R: "+ color.r + " G: "+ color.g + " B: " + color.b + " A: "+color.a, 'info');   
+        log("R: "+ color.r + " G: "+ color.g + " B: " + color.b + " A: "+color.a, 'info');
+        log("Width: " + imagedata.width + " Height : "+ imagedata.height, 'info');
     });
     
 }
