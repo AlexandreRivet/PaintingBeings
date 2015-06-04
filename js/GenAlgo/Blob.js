@@ -7,8 +7,7 @@ function Blob() {
     var blue = Math.floor((Math.random() * 255));
     
     this.color = [red, green, blue];
-    //this.position = position;
-    
+    //this.position = position;    
 }
 
 Blob.prototype = {

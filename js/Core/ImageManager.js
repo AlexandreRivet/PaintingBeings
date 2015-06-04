@@ -114,7 +114,9 @@ function saveImage(file) {
     reader.onload = function (e) {
         var image = new Image();
         image.onload = function () {
+            debugger;
             IMAGES[file.name].image = this;
+            IMAGES[file.name].naturalImage = image;
             log("Largeur : "+this.width+", Hauteur : "+ this.height,'info');
             IMAGES[file.name].image.size = {'w' : this.width, 'h' : this.height};
             IMAGES[file.name].image.id = 'photo_' + file.name;
@@ -158,8 +160,11 @@ function processImageToFloatArray(){
 */
 
 
-function generatePixelsColorArray( TEXTURE_PARAM){
-    var imagedata = getImageData( TEXTURE_PARAM.image );
+function generatePixelsColorArray( image){
+    var imagedata = getImageData( image );
+    
+    console.log("generatePixels: " + imagedata.width + " " +imagedata.height);
+    
     pixelsColorArray = new Array();
     for(var i = 0; i<imagedata.width ; ++i){
         /*if(!check(colorTableArray[i]))*/ pixelsColorArray[i] = new Array();
@@ -168,4 +173,54 @@ function generatePixelsColorArray( TEXTURE_PARAM){
         }
     }
     return pixelsColorArray;
+}
+
+function imageToJSON(source) 
+{    
+    var dest = {
+        "data": []
+    };
+    
+    for (var i = 0;  i < source.length; i++) 
+    {
+        dest.data.push([]);
+        for (var j = 0; j < source[i].length; j++) 
+        {
+            dest.data[i].push(
+                {
+                    "r": source[i][j].r,
+                    "g": source[i][j].g,
+                    "b": source[i][j].b,
+                    "a": source[i][j].a
+                }
+            );            
+        }
+    }
+    
+    return dest;
+}
+
+function JSONToImage(source)
+{
+    var data = source.data;
+    
+    var dest = new Array();
+    for (var i = 0; i < data.length; i++)
+    {
+        dest.push(new Array());
+        for (var j = 0; j < data[i].length; j++)
+        {
+            var pixel = data[i][j];
+            dest[i].push(
+                {
+                    "r": pixel.r,
+                    "g": pixel.g,
+                    "b": pixel.b,
+                    "a": pixel.a
+                }
+            );
+        }
+    }
+    
+    return dest;
 }

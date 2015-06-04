@@ -12,3 +12,5 @@ var SNAP_COUNT = 0;
 
 var MATERIAL = null;
 var OBJECT = null;
+
+var THREAD = null;

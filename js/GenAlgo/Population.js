@@ -8,9 +8,9 @@ function Population() {
 
 Population.prototype = {
     
-    randomInit : function() {
+    randomInit : function(size) {
         for ( var i = 0; i < populationNbr ; ++i) {
-            var blobImage = new BlobImage();
+            var blobImage = new BlobImage(size);
             this.blobImages.push(blobImage);
         }
         
@@ -23,14 +23,7 @@ Population.prototype = {
         }
         
         this.blobImages.sort(function(blobIA, blobIB) {
-            
-            if(blobIA.fitness < blobIB.fitness)
-                return 1;
-            else if(blobIA.fitness > blobIB.fitness)
-                return -1;
-            else
-                return 0;
-            
+            return (blobIA.fitness - blobIB.fitness);
         });
     }
     

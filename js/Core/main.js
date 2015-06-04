@@ -7,6 +7,7 @@ $(document).ready(function () {
    
     initInterface();
     initScene();
+    startThread();
 });
 
 
@@ -119,16 +120,11 @@ function initInterface() {
         var id = $(this).attr('id');
         CURRENT_IMAGE = id.substr(6);
         
-        // Ici faire le traitement de l'image et envoyer au thread
+        pixelsColorArray = generatePixelsColorArray(IMAGES[CURRENT_IMAGE].naturalImage);
         
-        /*
-         //debugger;
-        var imagedata = getImageData( TEXTURE.image );
-        pixelsColorArray = generatePixelsColorArray(TEXTURE);
-        var color = pixelsColorArray[10][10];
-        log("R: "+ color.r + " G: "+ color.g + " B: " + color.b + " A: "+color.a, 'info');
-        log("Width: " + imagedata.width + " Height : "+ imagedata.height, 'info');
-        */
+        var data = imageToJSON(pixelsColorArray);
+        
+        THREAD.postMessage(data);
     });
     
 }
@@ -166,5 +162,42 @@ function initScene()
     log('Scene inialised.', 'info');
 
     render();    
+}
+
+function startThread()
+{
+    if(typeof(Worker) !== "undefined") 
+    {
+        if(!check(THREAD)) 
+        {
+            THREAD = new Worker('js/WebWorker/GenAlgoWorker.js');
+        }
+        THREAD.onmessage = function(event) 
+        {    
+            var data = event.data;
+            var blobs = data.blobs;
+            
+            // debugger;
+            
+            //var width = IMAGES[CURRENT_IMAGE].image.size.w;
+            //var height = IMAGES[CURRENT_IMAGE].image.size.h;
+            var width = 2;
+            var height = 2;
+            
+            var ct = new CustomTexture(width, height);
+            
+            for (var i = 0; i < blobs.length; i++)
+            {
+                ct.setColorAtIndex(i, blobs[i].color);
+            }
+            ct.convertToImage();
+            $("#algoImage").html(ct.mImage);
+        };
+    } 
+    else 
+    {
+        console.warn('Worker are not available in your browser. Download one who supports this epic technology.');   
+    }
+    
 }
 

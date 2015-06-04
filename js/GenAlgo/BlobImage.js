@@ -1,11 +1,15 @@
-var blobNbr = 4100;
+// var blobNbr = 4100;
 var blobMutation = 30;
 
-function BlobImage() {
+function BlobImage(blobNbr) {
+    
+    // console.log("BlobImage:" + blobNbr);
+    
+    this.blobNumber = blobNbr;
     
     var newBlobs = new Array();
     
-    for (var i = 0; i < blobNbr ; ++i) {
+    for (var i = 0; i < this.blobNumber ; ++i) {
         newBlobs.push(new Blob());
     }
     
@@ -18,7 +22,7 @@ BlobImage.prototype = {
     
     crossOver : function(another) {
      
-        for (var i = 0; i < blobNbr / 2 ; ++i) {
+        for (var i = 0; i < this.blobNumber / 2 ; ++i) {
             this.blobs[i] = another.blobs[i];      
         }
         
@@ -26,10 +30,10 @@ BlobImage.prototype = {
     
     mutate : function() {
         
-        var blobToMutate = (blobNbr * blobMutation)/100;
+        var blobToMutate = (this.blobNumber * blobMutation) / 100;
         
         for (var i = 0; i < blobToMutate ; ++i) {
-            var randomIndex = Math.floor((Math.random() * blobNbr));    
+            var randomIndex = Math.floor((Math.random() * this.blobNumber));    
             this.blobs[randomIndex].mutate();
         }
         
@@ -37,11 +41,11 @@ BlobImage.prototype = {
     
     evaluate : function(image) {
         
+        this.fitness = 0;
+        
         for(var i = 0; i < image.length ; ++i) {
-            for(var j = 0; j < image[j].length; ++j) {
-                console.log(i + " " + j);
-                this.fitness += this.blobs[(i*image[i].length)+j].evaluate(image[i][j]);
-                
+            for(var j = 0; j < image[i].length; ++j) {
+                this.fitness += this.blobs[(i * image[i].length) + j].evaluate(image[i][j]);
             }
         }
         

@@ -1,32 +1,37 @@
 var currentPopulation;
 //var lastPopulation;
 
-function GenAlgo(currentImage) {
-     
-        currentPopulation = new Population();
-        currentPopulation.randomInit();
-        currentPopulation.evaluate(currentImage);
-        
+function GenAlgo(currentImage) 
+{     
+    var size = currentImage.length * currentImage[0].length;
+    
+    // console.log(size);
+    
+    currentPopulation = new Population();
+    currentPopulation.randomInit(size);
+    currentPopulation.evaluate(currentImage);       
 }
 
 function nextPopulation(currentImage) {
     
-    //lastPopulation = currentPopulation;
+    var size = currentImage.length * currentImage[0].length;
     
     //CrossOver
-    for (var i = 11 ; i < 44 ; ++i) {
-        currentPopulation.blobImages[i].crossOver(new BlobImage());
+    for (var i = 5 ; i < 40 ; ++i) {
+        currentPopulation.blobImages[i].crossOver(new BlobImage(size));
     }
     
     //Mutation
-    for (var i = 44 ; i < 77 ; ++i) {
+    for (var i = 41 ; i < 80 ; ++i) {
         currentPopulation.blobImages[i].mutate();
     }
     
     //New image
-    for (var i = 77 ; i <= 100 ; ++i) {
-        currentPopulation.blobImages[i] = new BlobImage();
+    for (var i = 81 ; i < 100 ; ++i) {
+        currentPopulation.blobImages[i] = new BlobImage(size);
     }
     
     currentPopulation.evaluate(currentImage);
+    
+    return currentPopulation.blobImages[0];
 }
