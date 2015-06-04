@@ -22,8 +22,10 @@ BlobImage.prototype = {
     
     crossOver : function(another) {
      
-        for (var i = 0; i < this.blobNumber / 2 ; ++i) {
-            this.blobs[i] = another.blobs[i];      
+        for (var i = 0; i < this.blobNumber ; ++i) {
+            var index = Math.floor((Math.random() * 2));
+            if(index)
+                this.blobs[i] = another.blobs[i];      
         }
         
     },

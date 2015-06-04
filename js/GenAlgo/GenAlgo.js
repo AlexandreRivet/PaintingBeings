@@ -18,7 +18,7 @@ function nextPopulation(currentImage) {
     
     //CrossOver
     for (var i = 5 ; i < 40 ; ++i) {
-        currentPopulation.blobImages[i].crossOver(new BlobImage(size));
+        currentPopulation.blobImages[i].crossOver(currentPopulation.blobImages[0]);
     }
     
     //Mutation
