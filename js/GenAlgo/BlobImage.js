@@ -35,10 +35,17 @@ BlobImage.prototype = {
         
     },
     
-    evaluate : function() {
+    evaluate : function(image) {
         
-        
+        for(var i = 0; i < image.length ; ++i) {
+            for(var j = 0; j < image[j].length; ++j) {
+                console.log(i + " " + j);
+                this.fitness += this.blobs[(i*image[i].length)+j].evaluate(image[i][j]);
+                
+            }
+        }
         
     }
     
 }
+            

@@ -227,6 +227,7 @@ function initInterface() {
         pixelsColorArray = generatePixelsColorArray(TEXTURE);
         var color = pixelsColorArray[10][10];
         log("R: "+ color.r + " G: "+ color.g + " B: " + color.b + " A: "+color.a, 'info');   
+        GenAlgo(pixelsColorArray);
     });
     
 }
@@ -241,6 +242,7 @@ function initScene()
     renderer.setClearColor(0x34495E);
     $("#render_panel").append(renderer.domElement);
 
+    TEXTURE = new THREE.Texture();
     var geometry = new THREE.IcosahedronGeometry(10, 2);
     // var material = new THREE.MeshBasicMaterial();
     MATERIAL = new THREE.ShaderMaterial({uniforms: BlobShader.uniforms, vertexShader: document.getElementById('vertexShader').textContent, fragmentShader: document.getElementById('fragmentShader').textContent});
@@ -279,7 +281,8 @@ function initScene()
         
         TIME_APPLICATION = 0.00050 * ( (new Date().getTime()) - BEGIN_APPLICATION );
         MATERIAL.uniforms["uTime"].value = TIME_APPLICATION;
-        
+        if(pixelsColorArray != undefined)
+            nextPopulation(pixelsColorArray);
         renderer.render(scene, camera);
         STATS.update();
     };  
