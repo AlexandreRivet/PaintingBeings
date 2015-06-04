@@ -9,7 +9,7 @@ $(document).ready(function () {
    
     initInterface();
     initScene();
-    // startThread();
+    startThread();
 });
 
 
@@ -124,13 +124,13 @@ function initInterface() {
         
         pixelsColorArray = generatePixelsColorArray(IMAGES[CURRENT_IMAGE].naturalImage);
         
-        // var data = imageToJSON(pixelsColorArray);
+        var data = imageToJSON(pixelsColorArray);
         //TMP_DATA = imageToJSON(pixelsColorArray);
-        TMP_DATA = pixelsColorArray;
+        //TMP_DATA = pixelsColorArray;
         
-        GenAlgo(TMP_DATA);
+        //GenAlgo(TMP_DATA);
         
-        runAlgo();
+        // runAlgo();
         
         THREAD.postMessage(data);
     });
@@ -212,6 +212,6 @@ function runAlgo()
 {
     nextPopulation(TMP_DATA);
     
-    setTimeout("runAlgo()", 1000);
+    setTimeout("runAlgo()", 50);
 }
 

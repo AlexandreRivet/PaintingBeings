@@ -11,31 +11,45 @@ function GenAlgo(currentImage)
 }
 
 function nextPopulation(currentImage) 
-{    
+{        
     var size = currentImage.length * currentImage[0].length;
     
-    lastFitness = currentPopulation.blobImages[0].fitness;
+    var newPopulation = new Population();
     
-    //CrossOver
-    for (var i = 15 ; i <= 40; i++) {
-        currentPopulation.blobImages[i].crossOver(currentPopulation.blobImages[0]);
+    // 10 percent of best
+    for (var i = 0; i < 10; i++)
+    {
+        var blobImage = currentPopulation.blobImages[i].clone();
+        newPopulation.blobImages.push(blobImage);
     }
     
-    //Mutation
-    for (var i = 41 ; i <= 60 ; i++) {
-        currentPopulation.blobImages[i].mutate();
+    // 30 percent of cross
+    for (var i = 0; i < 30; i++)
+    {
+        var blobImage = currentPopulation.blobImages[i];
+        var crossed = blobImage.crossOver(new BlobImage(size));
+        newPopulation.blobImages.push(crossed);
     }
     
-    //New image
-    for (var i = 61 ; i < 100 ; i++) {
-        currentPopulation.blobImages[i] = new BlobImage(size);
+    // 30 percent of mutate
+    for (var i = 0 ; i < 30; i++) 
+    {
+        var blobImage = currentPopulation.blobImages[i];
+        var muted = blobImage.mutate(new BlobImage(size));
+        newPopulation.blobImages.push(muted);
     }
     
-    currentPopulation.evaluate(currentImage);
+    // 30 percent of random
+    for (var i = 0 ; i < 30 ; i++) 
+    {
+        newPopulation.blobImages.push(new BlobImage(size));
+    }
     
-    console.log (lastFitness + " " + currentPopulation.blobImages[0].fitness);
-    if (lastFitness < currentPopulation.blobImages[0].fitness)
-        debugger;
+    newPopulation.evaluate(currentImage);
     
-    return currentPopulation.blobImages[0];
+    console.log(newPopulation.blobImages[0].fitness);
+    
+    currentPopulation = newPopulation.clone();
+    
+    return newPopulation.blobImages[0];
 }

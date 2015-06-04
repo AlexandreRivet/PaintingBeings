@@ -1,9 +1,9 @@
 
 var populationNbr = 100;
 
-function Population() {
+function Population() 
+{
     this.blobImages = new Array();
-    
 }
 
 Population.prototype = {
@@ -18,36 +18,45 @@ Population.prototype = {
     
     evaluate : function(image) {
     
-        console.log("Avant evaluate");
+        // console.log("Avant evaluate");
         
         //Evaluate and sort the array
         for(var i = 0; i < populationNbr ; ++i) {
             // console.log("Blob image fitness " + i );
-            console.log(this.blobImages[i].fitness);
+            // console.log(this.blobImages[i].fitness);
             this.blobImages[i].evaluate(image);
         }
         
-        console.log("Après evaluate");
+        // console.log("Après evaluate");
         //Evaluate and sort the array
-        for(var i = 0; i < populationNbr ; ++i) {
+        //for(var i = 0; i < populationNbr ; ++i) {
             // console.log("Blob image fitness " + i );
-            console.log(this.blobImages[i].fitness);
-        }
+        //    console.log(this.blobImages[i].fitness);
+        //}
         
-        console.log("Avant sort");
+        // console.log("Avant sort");
         
         this.blobImages.sort(function(blobIA, blobIB) {
             return (blobIA.fitness - blobIB.fitness);
         });
         
-        console.log("Après sort");
+        // console.log("Après sort");
         
-        for (var i = 0; i < this.blobImages.length - 1; i++)
-        {
-            console.log(this.blobImages[i].fitness);
-            if (this.blobImages[i + 1].fitness < this.blobImages[i].fitness)
-                console.log("COCK");
-        }
+        //for (var i = 0; i < this.blobImages.length - 1; i++)
+        //{
+            //console.log(this.blobImages[i].fitness);
+            //if (this.blobImages[i + 1].fitness < this.blobImages[i].fitness)
+                //console.log("COCK");
+        //}
+    },
+    
+    clone: function()
+    {
+        var newPopulation = new Population();
+        for (var i = 0; i < this.blobImages.length; i++)
+            newPopulation.blobImages.push(this.blobImages[i].clone());
+        
+        return newPopulation;
     }
     
 }

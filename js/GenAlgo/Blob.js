@@ -7,7 +7,7 @@ function Blob() {
     var blue = Math.floor((Math.random() * 255));
     
     this.color = [red, green, blue];
-    //this.position = position;    
+    // this.position = position;  
 }
 
 Blob.prototype = {
@@ -26,6 +26,20 @@ Blob.prototype = {
         var diffB = Math.abs(this.color[2] - pixelColor.b);
         
         return diffR + diffG + diffB;
+    },
+    
+    clone: function() {
+     
+        var newBlob = new Blob();
+        newBlob.size = this.size;
+        newBlob.color =
+            [
+                this.color[0],
+                this.color[1],
+                this.color[2]
+            ];
+        return newBlob;
+        
     }
     
 }

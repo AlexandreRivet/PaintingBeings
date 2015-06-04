@@ -1,15 +1,14 @@
 // var blobNbr = 4100;
 var blobMutation = 30;
 
-function BlobImage(blobNbr) {
-    
-    // console.log("BlobImage:" + blobNbr);
-    
+function BlobImage(blobNbr) 
+{
     this.blobNumber = blobNbr;
     
     var newBlobs = new Array();
     
-    for (var i = 0; i < this.blobNumber ; ++i) {
+    for (var i = 0; i < this.blobNumber ; ++i) 
+    {
         newBlobs.push(new Blob());
     }
     
@@ -18,49 +17,64 @@ function BlobImage(blobNbr) {
     
 }
 
-BlobImage.prototype = {
+BlobImage.prototype = 
+{
     
-    crossOver : function(another) {
+    crossOver : function(another) 
+    {
      
-        for (var i = 0; i < this.blobNumber ; ++i) {
+        var copy = this.clone();
+        
+        for (var i = 0; i < this.blobNumber ; ++i) 
+        {
             var index = Math.floor((Math.random() * 2));
             if(index)
             {
-                var b_tmp = new Blob();
-                b_tmp.size = another.blobs[i].size;
-                b_tmp.color = new Array();
-                b_tmp.color.push(another.blobs[i].color[0]);
-                b_tmp.color.push(another.blobs[i].color[1]);
-                b_tmp.color.push(another.blobs[i].color[2]);
-                this.blobs[i] = b_tmp;
+                copy.blobs[i] = another.blobs[i].clone();
             }
         }
         
+        return copy;
+        
     },
     
-    mutate : function() {
+    mutate : function() 
+    {   
+        var copy = this.clone();
         
         var blobToMutate = (this.blobNumber * blobMutation) / 100;
-        
-        for (var i = 0; i < blobToMutate ; ++i) {
+        for (var i = 0; i < blobToMutate ; ++i) 
+        {
             var randomIndex = Math.floor((Math.random() * this.blobNumber));    
-            this.blobs[randomIndex].mutate();
+            copy.blobs[randomIndex].mutate();
         }
+        
+        return copy;
         
     },
     
-    evaluate : function(image) {
+    evaluate : function(image) 
+    {    
         
         this.fitness = 0;
-        
-        for(var i = 0; i < image.length ; ++i) {
-            for(var j = 0; j < image[i].length; ++j) {
+        for(var i = 0; i < image.length ; i++) 
+        {
+            for(var j = 0; j < image[i].length; j++) 
+            {
                 this.fitness += this.blobs[(i * image[i].length) + j].evaluate(image[i][j]);
             }
         }
         
-        // console.log(this.fitness);
+    },
+    
+    clone: function()
+    {
+        var newBlobImage = new BlobImage(this.blobNumber);
+        for (var i = 0; i < this.blobNumber; i++)
+            newBlobImage.blobs[i] = this.blobs[i].clone();
+        newBlobImage.fitness = this.fitness;
         
+        return newBlobImage;
     }
     
 }
