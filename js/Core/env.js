@@ -5,6 +5,7 @@ var STATS = null;
 var START_TIME;
 var CURRENT_TIME;
 
+var GEN_ALGO_TEXTURE;
 var COLOR_TEXTURE;
 var POSITION_TEXTURE;
 

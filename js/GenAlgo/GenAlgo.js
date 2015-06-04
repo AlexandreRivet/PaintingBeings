@@ -5,8 +5,6 @@ function GenAlgo(currentImage)
 {     
     var size = currentImage.length * currentImage[0].length;
     
-    // console.log(size);
-    
     currentPopulation = new Population();
     currentPopulation.randomInit(size);
     currentPopulation.evaluate(currentImage);       

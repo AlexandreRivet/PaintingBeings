@@ -76,6 +76,7 @@ CustomTexture.prototype.setColorAtPosition = function(row, col, color)
     data[2] = color[2];
     data[3] = 255;
     this.mCtx.putImageData(pixel, col, row);
+    delete pixel;
 }
 
 CustomTexture.prototype.convertToImage = function()
@@ -140,7 +141,6 @@ function getImageData( image ) {
     context.drawImage( image, 0, 0 );
 
     return context.getImageData( 0, 0, image.width, image.height );
-
 }
 
 function getPixel( imagedata, x, y ) {
@@ -160,17 +160,15 @@ function processImageToFloatArray(){
 
 
 function generatePixelsColorArray( image){
-    var imagedata = getImageData( image );
-    
-    console.log("generatePixels: " + imagedata.width + " " +imagedata.height);
-    
+    var imagedata = getImageData(image);
     pixelsColorArray = new Array();
     for(var i = 0; i<imagedata.width ; ++i){
-        /*if(!check(colorTableArray[i]))*/ pixelsColorArray[i] = new Array();
+        pixelsColorArray[i] = new Array();
         for(var j = 0; j<imagedata.height ; ++j){
             pixelsColorArray[i][j] = getPixel(imagedata, i, j);
         }
     }
+    
     return pixelsColorArray;
 }
 
