@@ -27,7 +27,7 @@ function nextPopulation(currentImage)
     for (var i = 0; i < 30; i++)
     {
         var blobImage = currentPopulation.blobImages[i];
-        var crossed = blobImage.crossOver(currentPopulation.blobImages[Math.floor(Math.random()*100)]);
+        var crossed = blobImage.crossOver(currentPopulation.blobImages[Math.floor(Math.random()*99)]);
         newPopulation.blobImages.push(crossed);
     }
     

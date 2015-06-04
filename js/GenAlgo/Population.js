@@ -1,4 +1,4 @@
-var populationNbr = 50;
+var populationNbr = 100;
 
 function Population() 
 {
