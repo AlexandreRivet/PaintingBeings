@@ -165,7 +165,7 @@ function generatePixelsColorArray( image){
     for(var i = 0; i<imagedata.width ; ++i){
         pixelsColorArray[i] = new Array();
         for(var j = 0; j<imagedata.height ; ++j){
-            pixelsColorArray[i][j] = getPixel(imagedata, i, j);
+            pixelsColorArray[i][j] = getPixel(imagedata, j, i);
         }
     }
     
