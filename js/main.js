@@ -95,9 +95,9 @@ function processImageToFloatArray(){
 
 function generatePixelsColorArray( TEXTURE_PARAM){
     var imagedata = getImageData( TEXTURE_PARAM.image );
-    var colorTableArray = new Array();
+    var pixelsColorArray = new Array();
     for(var i = 0; i<imagedata.width ; ++i){
-        /*if(!check(colorTableArray[i]))*/ colorTableArray[i] = new Array();
+        /*if(!check(colorTableArray[i]))*/ pixelsColorArray[i] = new Array();
         for(var j = 0; j<imagedata.height ; ++j){
             pixelsColorArray[i][j] = getPixel(imagedata, i, j);
         }
@@ -220,7 +220,7 @@ function initInterface() {
             TEXTURE.sourceFile = CURRENT_IMAGE;
             TEXTURE.needsUpdate = true;
         }
-        debugger;
+        //debugger;
         var imagedata = getImageData( TEXTURE.image );
         var pixelsColorArray = generatePixelsColorArray(TEXTURE);
         var color = pixelsColorArray[10][10];
