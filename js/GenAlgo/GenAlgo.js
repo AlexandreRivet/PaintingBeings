@@ -17,7 +17,7 @@ function nextPopulation(currentImage)
     var newPopulation = new Population();
     
     // 10 percent of best
-    for (var i = 0; i < 10; i++)
+    for (var i = 0; i < 20; i++)
     {
         var blobImage = currentPopulation.blobImages[i].clone();
         newPopulation.blobImages.push(blobImage);
@@ -27,7 +27,7 @@ function nextPopulation(currentImage)
     for (var i = 0; i < 30; i++)
     {
         var blobImage = currentPopulation.blobImages[i];
-        var crossed = blobImage.crossOver(new BlobImage(size));
+        var crossed = blobImage.crossOver(currentPopulation.blobImages[Math.floor(Math.random()*100)]);
         newPopulation.blobImages.push(crossed);
     }
     
@@ -40,7 +40,7 @@ function nextPopulation(currentImage)
     }
     
     // 30 percent of random
-    for (var i = 0 ; i < 30 ; i++) 
+    for (var i = 0 ; i < 20 ; i++) 
     {
         newPopulation.blobImages.push(new BlobImage(size));
     }
