@@ -101,7 +101,7 @@ function saveFiles(files)
             continue;
         }
                   
-        IMAGES[file.name] = {"file": file, "image": null};
+        IMAGES[file.name] = {"file": file, "image": null, "naturalImage": null};
         CURRENT_IMAGE = file.name;
         
         saveImage(file);
@@ -114,16 +114,15 @@ function saveImage(file) {
     reader.onload = function (e) {
         var image = new Image();
         image.onload = function () {
-            debugger;
+            IMAGES[file.name].naturalImage = this.cloneNode(true);
+            
             IMAGES[file.name].image = this;
-            IMAGES[file.name].naturalImage = image;
-            log("Largeur : "+this.width+", Hauteur : "+ this.height,'info');
             IMAGES[file.name].image.size = {'w' : this.width, 'h' : this.height};
             IMAGES[file.name].image.id = 'photo_' + file.name;
             IMAGES[file.name].image.className = 'photo';
-            
             $('#gallery_slider').append(IMAGES[file.name].image);
             
+            log("Largeur : "+this.width+", Hauteur : "+ this.height,'info');
             log("L'image '" + file.name + "' a été chargée avec succès.", 'success');
         };
         image.src = e.target.result;
