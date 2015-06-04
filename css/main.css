@@ -406,7 +406,7 @@ body
     right: 1px;
     -webkit-animation-name: closestats; /* Chrome, Safari, Opera */
     -webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
-    animation-name: closeconsole;
+    animation-name: closestats;
     animation-duration: 1s;
 }
 
@@ -415,7 +415,7 @@ body
     right: 260px;
     -webkit-animation-name: openstats; /* Chrome, Safari, Opera */
     -webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
-    animation-name: opensole;
+    animation-name: openstats;
     animation-duration: 1s;
 }
 
@@ -469,7 +469,7 @@ body
     right: 460px;
     -webkit-animation-name: openconsole; /* Chrome, Safari, Opera */
     -webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
-    animation-name: opensole;
+    animation-name: openconsole;
     animation-duration: 1s;
 }
 
