@@ -1,7 +1,7 @@
-var populationNbr = 50;
-var percentBest = Math.floor(populationNbr* 10 / 100);
-var percentCrossed = Math.floor(populationNbr* 10 / 100);
-var percentMutate = Math.floor(populationNbr* 10 / 100);
+var populationNbr = 100;
+var percentBest = Math.floor(populationNbr* 20 / 100);
+var percentCrossed = Math.floor(populationNbr* 60 / 100);
+var percentMutate = Math.floor(populationNbr* 5 / 100);
 var percentRandom = populationNbr - percentBest - percentCrossed - percentMutate;
 
 function Population() 

@@ -125,12 +125,6 @@ function initInterface() {
         pixelsColorArray = generatePixelsColorArray(IMAGES[CURRENT_IMAGE].naturalImage);
         
         var data = imageToJSON(pixelsColorArray);
-        //TMP_DATA = imageToJSON(pixelsColorArray);
-        //TMP_DATA = pixelsColorArray;
-        
-        //GenAlgo(TMP_DATA);
-        
-        // runAlgo();
         
         THREAD.postMessage(data);
     });
@@ -142,39 +136,83 @@ function initScene()
     log('Initialisation scene.', 'info');
     
     var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+    var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 2000 );
 
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.setClearColor(0x34495E);
     $("#render_panel").append(renderer.domElement);
-    /*
-    var nbBlobs = 4096;
     
-    var model = new THREE.IcosahedronGeometry(20, 2);
+    var row = 32;
+    var col = 32;
+    var nbBlobs = row * col;
+    
+    var model = new THREE.IcosahedronGeometry(10, 2);
     var geometry = new THREE.BufferGeometry();
     var vertices = new THREE.BufferAttribute(new Float32Array(nbBlobs * model.faces.length * 3 * 3), 3);
     
     var index = 0, localPosition;
+    var dx = -700, dy = -700;
+    for (var i = 0; i < nbBlobs; i++)
+    {
+        if ((i != 0) && (i % col == 0))
+        {
+            dx = -700; 
+            dy += 25;
+        }
+        else if (i!=0)
+        {
+            dx += 25;   
+        }
+        
+        for (var j = 0; j < model.faces.length; j++)
+        {
+            localPosition = model.vertices[model.faces[j].a];
+            vertices.setXYZ(index, localPosition.x + dx, localPosition.y + dy, localPosition.z);
+            index++;    
+            
+            localPosition = model.vertices[model.faces[j].b];
+            vertices.setXYZ(index, localPosition.x + dx, localPosition.y + dy, localPosition.z);
+            index++;
+            
+            localPosition = model.vertices[model.faces[j].c];
+            vertices.setXYZ(index, localPosition.x + dx, localPosition.y + dy, localPosition.z);
+            index++;
+        }
+    }
+    geometry.addAttribute('position', vertices);
+    
+    index = 0;
+    var indices = new THREE.BufferAttribute(new Float32Array(nbBlobs * model.faces.length * 3 * 4), 4);
     for (var i = 0; i < nbBlobs; i++)
     {
         for (var j = 0; j < model.faces.length; j++)
         {
-            localPosition = model.vertices[model.faces[j].a];
-            vertices.push(
-            index++;    
-            
+            indices.setXYZW(index, i, 0, 0, 0);
             index++;
-            
+            indices.setXYZW(index, i, 0, 0, 0);
+            index++;
+            indices.setXYZW(index, i, 0, 0, 0);
             index++;
         }
     }
-    */
+    geometry.addAttribute('color', indices);
     
+    MATERIAL = new THREE.RawShaderMaterial(
+        {
+            uniforms: BlobShader.uniforms,
+            vertexShader: document.getElementById("vertexShader").textContent,
+            fragmentShader: document.getElementById("fragmentShader").textContent
+        }
+    );
     
+    OBJECT = new THREE.Mesh(geometry, MATERIAL);
+    COLOR_TEXTURE = new THREE.Texture();
+    OBJECT.material.uniforms["uSampler"].value = COLOR_TEXTURE;
     
+    scene.add(OBJECT);
     
-    camera.position.z = 1000;
+    camera.position.z = 1500;
 
     STATS = new Stats();
     STATS.domElement.style.position = 'absolute';
@@ -186,6 +224,8 @@ function initScene()
         
         CURRENT_TIME = (new Date().getTime());
         TIME_APPLICATION = CURRENT_TIME - START_TIME;
+        
+        OBJECT.material.uniforms["uTime"].value = TIME_APPLICATION * 0.0005;
         
         renderer.render(scene, camera);
         
@@ -222,8 +262,12 @@ function startThread()
             {
                 GEN_ALGO_TEXTURE.setColorAtIndex(i, blobs[i].color);
             }
-            // ct.convertToImage();
-            $("#algoImage").html(GEN_ALGO_TEXTURE.mCanvas);
+            
+            OBJECT.material.uniforms["uSamplerSize"].value = new THREE.Vector2(width, height);
+            
+            COLOR_TEXTURE.image = GEN_ALGO_TEXTURE.mCanvas;
+            COLOR_TEXTURE.sourceFile = GEN_ALGO_TEXTURE.mCanvas;
+            COLOR_TEXTURE.needsUpdate = true;
         };
     } 
     else 

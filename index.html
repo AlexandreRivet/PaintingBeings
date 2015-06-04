@@ -14,15 +14,13 @@
     <script type="text/javascript" src="libs/three/stats.min.js"></script>
     <script type="text/javascript" src="libs/webcam/webcam.js"></script>
     
-    <script type="text/javascript" src="js/GenAlgo/Blob.js"></script>
-    <script type="text/javascript" src="js/GenAlgo/BlobImage.js"></script>
-    <script type="text/javascript" src="js/GenAlgo/GenAlgo.js"></script>
-    <script type="text/javascript" src="js/GenAlgo/Population.js"></script>
-    
     <!-- Scripts JS -->
     <script type="text/javascript" src="js/Core/env.js"></script>
     <script type="text/javascript" src="js/Core/utils.js"></script>
     <script type="text/javascript" src="js/Core/ImageManager.js"></script>
+    
+    <script type="text/javascript" src="js/Shaders/BlobShader.js"></script>
+    
     
     <script type="text/javascript" src="js/Core/main.js"></script>
     
@@ -180,6 +178,8 @@
         precision mediump int;
         
         uniform sampler2D uSampler;
+        uniform vec2 uSamplerSize;
+        uniform vec2 uBlobsSize;
         uniform float uSeed;
 
         varying float noise;
@@ -195,10 +195,23 @@
         
             float value = 1.0 - 1.3 * noise + r;
             
-            vec2 uv = vec2(mod(vRef, 64.0) / 64.0, vRef / 64.0 / 64.0);
-            vec4 color = texture2D(uSampler, uv);
+            float x = mod(vRef, uBlobsSize.x);
+            float y = vRef / uBlobsSize.x;
             
-            gl_FragColor = vec4(color.rgb, 1.0);
+            if (x >= uSamplerSize.x || y >= uSamplerSize.y)
+            {
+                gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+            }
+            else
+            {
+                x /= uSamplerSize.x;
+                y /= uSamplerSize.y;
+                vec2 uv = vec2(x, y);
+                
+                vec4 color = texture2D(uSampler, uv);
+            
+                gl_FragColor = vec4(color.rgb, 1.0);
+            }
         }   
 
     </script>
@@ -264,8 +277,6 @@
             </div>
         </div>
     </div>
-    
-    <div id="algoImage" style="position:absolute; top:0px;"></div>
     
 </body>
 

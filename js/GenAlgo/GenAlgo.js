@@ -47,7 +47,7 @@ function nextPopulation(currentImage)
     
     newPopulation.evaluate(currentImage);
     
-    console.log(newPopulation.blobImages[0].fitness);
+    // console.log(newPopulation.blobImages[0].fitness);
     
     currentPopulation = newPopulation.clone();
     
