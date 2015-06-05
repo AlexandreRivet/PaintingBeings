@@ -3,6 +3,8 @@ var lastFitness;
 
 function GenAlgo(currentImage) 
 {     
+    debugger;
+    
     var size = currentImage.length * currentImage[0].length;
     
     currentPopulation = new Population();
@@ -14,16 +16,16 @@ function nextPopulation(currentImage)
 {        
     var size = currentImage.length * currentImage[0].length;
     
+    debugger;
+    
     var newPopulation = new Population();
     
-    // 10 percent of best
     for (var i = 0; i < percentBest; i++)
     {
         var blobImage = currentPopulation.blobImages[i].clone();
         newPopulation.blobImages.push(blobImage);
     }
-     
-    // 30 percent of cross
+
     for (var i = 0; i < percentCrossed; i++)
     {
         var blobImage = currentPopulation.blobImages[i];
@@ -31,7 +33,6 @@ function nextPopulation(currentImage)
         newPopulation.blobImages.push(crossed);
     }
     
-    // 30 percent of mutate
     for (var i = 0 ; i < percentMutate; i++) 
     {
         var blobImage = currentPopulation.blobImages[i];
@@ -39,7 +40,6 @@ function nextPopulation(currentImage)
         newPopulation.blobImages.push(muted);
     }
     
-    // 30 percent of random
     for (var i = 0 ; i < percentRandom ; i++) 
     {
         newPopulation.blobImages.push(new BlobImage(size));

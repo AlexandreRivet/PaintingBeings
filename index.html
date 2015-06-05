@@ -195,12 +195,12 @@
         
             float value = 1.0 - 1.3 * noise + r;
             
-            float x = mod(vRef, uBlobsSize.x);
+            float x = mod(vRef, uBlobsSize.y);
             float y = vRef / uBlobsSize.x;
             
             if (x >= uSamplerSize.x || y >= uSamplerSize.y)
             {
-                gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+                gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
             }
             else
             {

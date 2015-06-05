@@ -1,7 +1,7 @@
 var populationNbr = 100;
-var percentBest = Math.floor(populationNbr* 20 / 100);
-var percentCrossed = Math.floor(populationNbr* 65 / 100);
-var percentMutate = Math.floor(populationNbr* 2 / 100);
+var percentBest = Math.floor(populationNbr * 20 / 100);
+var percentCrossed = Math.floor(populationNbr * 65 / 100);
+var percentMutate = Math.floor(populationNbr * 2 / 100);
 var percentRandom = populationNbr - percentBest - percentCrossed - percentMutate;
 
 function Population() 
@@ -21,6 +21,7 @@ Population.prototype = {
     
     evaluate : function(image) 
     {
+        console.log(image);
         
         for(var i = 0; i < populationNbr ; ++i) 
             this.blobImages[i].evaluate(image);

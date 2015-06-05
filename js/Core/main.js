@@ -122,7 +122,7 @@ function initInterface() {
         var id = $(this).attr('id');
         CURRENT_IMAGE = id.substr(6);
         
-        pixelsColorArray = generatePixelsColorArray(IMAGES[CURRENT_IMAGE].naturalImage);
+        pixelsColorArray = generatePixelsColorArray(IMAGES[CURRENT_IMAGE]);
         
         var data = imageToJSON(pixelsColorArray);
         
@@ -152,12 +152,12 @@ function initScene()
     var vertices = new THREE.BufferAttribute(new Float32Array(nbBlobs * model.faces.length * 3 * 3), 3);
     
     var index = 0, localPosition;
-    var dx = -700, dy = -700;
+    var dx = -(row / 2 * 25), dy = -(row / 2 * 25);
     for (var i = 0; i < nbBlobs; i++)
     {
         if ((i != 0) && (i % col == 0))
         {
-            dx = -700; 
+            dx = -(row / 2 * 25);; 
             dy += 25;
         }
         else if (i!=0)
@@ -198,21 +198,24 @@ function initScene()
     }
     geometry.addAttribute('color', indices);
     
+    BlobShader.uniforms["uBlobsSize"].value = new THREE.Vector2(row, col);
     MATERIAL = new THREE.RawShaderMaterial(
         {
             uniforms: BlobShader.uniforms,
             vertexShader: document.getElementById("vertexShader").textContent,
-            fragmentShader: document.getElementById("fragmentShader").textContent
+            fragmentShader: document.getElementById("fragmentShader").textContent,
+            transparent: true
         }
     );
     
     OBJECT = new THREE.Mesh(geometry, MATERIAL);
     COLOR_TEXTURE = new THREE.Texture();
+    COLOR_TEXTURE.minFilter = THREE.NearestFilter;
     OBJECT.material.uniforms["uSampler"].value = COLOR_TEXTURE;
     
     scene.add(OBJECT);
     
-    camera.position.z = 1500;
+    camera.position.z = 1000;
 
     STATS = new Stats();
     STATS.domElement.style.position = 'absolute';
@@ -225,6 +228,7 @@ function initScene()
         CURRENT_TIME = (new Date().getTime());
         TIME_APPLICATION = CURRENT_TIME - START_TIME;
         
+        // OBJECT.rotation.y += 0.005;
         OBJECT.material.uniforms["uTime"].value = TIME_APPLICATION * 0.0005;
         
         renderer.render(scene, camera);
@@ -250,8 +254,8 @@ function startThread()
             var data = event.data;
             var blobs = data.blobs;
             
-            var width = IMAGES[CURRENT_IMAGE].image.size.w;
-            var height = IMAGES[CURRENT_IMAGE].image.size.h;
+            var width = IMAGES[CURRENT_IMAGE].naturalDownScale.x;
+            var height = IMAGES[CURRENT_IMAGE].naturalDownScale.y;
             
             if ( (!check(GEN_ALGO_TEXTURE)) || (GEN_ALGO_TEXTURE.mWidth != width) || (GEN_ALGO_TEXTURE.mHeight != height))
             {

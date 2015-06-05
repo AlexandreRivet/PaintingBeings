@@ -131,16 +131,24 @@ function saveImage(file) {
     reader.readAsDataURL(file);
 }
 
-function getImageData( image ) {
-
+function getImageData( image ) 
+{
+    var size = downScale(image, 32);
+    
     var canvas = document.createElement( 'canvas' );
-    canvas.width = image.width;
-    canvas.height = image.height;
+    canvas.width = size.x;
+    canvas.height = size.y;
 
-    var context = canvas.getContext( '2d' );
-    context.drawImage( image, 0, 0 );
+    var context = canvas.getContext( '2d' );    
+    
+    context.drawImage( image, 0, 0, size.x, size.y);
+    
+    canvas.style.position = "absolute";
+    canvas.style.top = "0px";
+    
+    $("body").append(canvas);
 
-    return context.getImageData( 0, 0, image.width, image.height );
+    return context.getImageData( 0, 0, size.x, size.y );
 }
 
 function getPixel( imagedata, x, y ) {
@@ -150,21 +158,17 @@ function getPixel( imagedata, x, y ) {
 
 }
 
-/*
-function processImageToFloatArray(){
-    var imagedata = getImageData( imgTexture.image );
-    var color = getPixel( imagedata, 10, 10 );
-    return color;
-}
-*/
-
-
-function generatePixelsColorArray( image){
-    var imagedata = getImageData(image);
+function generatePixelsColorArray(image)
+{
+    var imagedata = getImageData(image.naturalImage);
+    image.naturalDownScale = new THREE.Vector2(imagedata.width, imagedata.height);
+    
     pixelsColorArray = new Array();
-    for(var i = 0; i<imagedata.width ; ++i){
+    for(var i = 0; i<imagedata.height ; i++)
+    {
         pixelsColorArray[i] = new Array();
-        for(var j = 0; j<imagedata.height ; ++j){
+        for(var j = 0; j<imagedata.width ; j++)
+        {
             pixelsColorArray[i][j] = getPixel(imagedata, j, i);
         }
     }
@@ -172,12 +176,37 @@ function generatePixelsColorArray( image){
     return pixelsColorArray;
 }
 
+function downScale(image, maxSize)
+{
+    var imgWidth = image.width;
+    var imgHeight = image.height;
+    
+    var finalWidth, finalHeight;
+    
+    if (imgWidth < maxSize && imgHeight < maxSize)
+        return new THREE.Vector2(imgWidth, imgHeight);
+    
+    
+    if (imgWidth > imgHeight)
+    {
+        finalWidth = maxSize;
+        finalHeight = imgHeight / (imgWidth/maxSize);
+    }
+    else
+    {
+        finalHeight = maxSize;
+        finalWidth = imgWidth / (imgHeight/maxSize);
+    }
+    
+    return new THREE.Vector2(finalWidth, finalHeight);
+}
+
 function imageToJSON(source) 
 {    
     var dest = {
         "data": []
     };
-    
+
     for (var i = 0;  i < source.length; i++) 
     {
         dest.data.push([]);
@@ -200,7 +229,7 @@ function imageToJSON(source)
 function JSONToImage(source)
 {
     var data = source.data;
-    
+
     var dest = new Array();
     for (var i = 0; i < data.length; i++)
     {

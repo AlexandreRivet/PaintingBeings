@@ -10,7 +10,7 @@ importScripts(
 var IMAGE_ANALYSED;
 
 function main()
-{
+{    
     if (check(IMAGE_ANALYSED))
     {
         // Traitement de l'algorithme génétique
@@ -21,7 +21,7 @@ function main()
     }
     
     // Relance de la fonction
-    setTimeout("main()", 100);
+    setTimeout("main()", 30);
 }
 
 self.addEventListener('message', function(e) {

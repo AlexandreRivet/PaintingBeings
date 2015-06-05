@@ -55,7 +55,6 @@ BlobImage.prototype =
     
     evaluate : function(image) 
     {    
-        
         this.fitness = 0;
         for(var i = 0; i < image.length ; i++) 
         {
