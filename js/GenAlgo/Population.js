@@ -21,8 +21,6 @@ Population.prototype = {
     
     evaluate : function(image) 
     {
-        console.log(image);
-        
         for(var i = 0; i < populationNbr ; ++i) 
             this.blobImages[i].evaluate(image);
 

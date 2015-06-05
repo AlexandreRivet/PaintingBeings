@@ -28,7 +28,9 @@ function initInterface() {
             img.id = 'photo_' + 'snap_' + SNAP_COUNT;
             img.className = 'photo';
             
-            IMAGES['snap_' + SNAP_COUNT] =  {"file": null, "image": img};
+            IMAGES['snap_' + SNAP_COUNT] =  {"file": null, "image": img , "naturalImage": null};
+            
+            IMAGES['snap_' + SNAP_COUNT].naturalImage = img.cloneNode(true);
             
             $('#gallery_slider').append(IMAGES['snap_' + SNAP_COUNT].image);
             
@@ -152,12 +154,13 @@ function initScene()
     var vertices = new THREE.BufferAttribute(new Float32Array(nbBlobs * model.faces.length * 3 * 3), 3);
     
     var index = 0, localPosition;
-    var dx = -(row / 2 * 25), dy = -(row / 2 * 25);
+    var back = -(row / 2 * 25);
+    var dx = back, dy = back;
     for (var i = 0; i < nbBlobs; i++)
     {
         if ((i != 0) && (i % col == 0))
         {
-            dx = -(row / 2 * 25);; 
+            dx = back;
             dy += 25;
         }
         else if (i!=0)
