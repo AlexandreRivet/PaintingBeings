@@ -2,9 +2,7 @@ var currentPopulation;
 var lastFitness;
 
 function GenAlgo(currentImage) 
-{     
-    debugger;
-    
+{         
     var size = currentImage.length * currentImage[0].length;
     
     currentPopulation = new Population();
@@ -15,9 +13,7 @@ function GenAlgo(currentImage)
 function nextPopulation(currentImage) 
 {        
     var size = currentImage.length * currentImage[0].length;
-    
-    debugger;
-    
+
     var newPopulation = new Population();
     
     for (var i = 0; i < percentBest; i++)

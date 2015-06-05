@@ -28,7 +28,9 @@ function initInterface() {
             img.id = 'photo_' + 'snap_' + SNAP_COUNT;
             img.className = 'photo';
             
-            IMAGES['snap_' + SNAP_COUNT] =  {"file": null, "image": img};
+            IMAGES['snap_' + SNAP_COUNT] =  {"file": null, "image": img , "naturalImage": null};
+            
+            IMAGES['snap_' + SNAP_COUNT].naturalImage = img.cloneNode(true);
             
             $('#gallery_slider').append(IMAGES['snap_' + SNAP_COUNT].image);
             
@@ -129,6 +131,47 @@ function initInterface() {
         THREAD.postMessage(data);
     });
     
+    $("body").keyup(function(e) {
+        console.log(e.which);
+        switch(e.which) 
+        {
+            case 73:
+                flipInterface();
+                break;
+            case 82:
+                ROTATE_ALLOWED = !ROTATE_ALLOWED;
+                break;
+            case 107:
+                CAMERA.position.z -= 100;
+                break;
+                
+            case 109:
+                CAMERA.position.z += 100;
+                break;
+        }
+    });
+}
+
+function flipInterface()
+{
+    INTERFACE_STATE = !INTERFACE_STATE;
+    
+    if (INTERFACE_STATE == true)
+    {
+        $("#header").show();
+        $("#left_panel").show();
+        $("#whatisthis").show();
+        $("#right_panel").show();
+        $("#right_panel_bis").show();
+    }
+    else
+    {
+        $("#header").hide();
+        $("#left_panel").hide();
+        $("#whatisthis").hide();
+        $("#right_panel").hide();
+        $("#right_panel_bis").hide();      
+    }
 }
 
 function initScene()
@@ -136,7 +179,7 @@ function initScene()
     log('Initialisation scene.', 'info');
     
     var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 2000 );
+    CAMERA = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 2000 );
 
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -152,12 +195,13 @@ function initScene()
     var vertices = new THREE.BufferAttribute(new Float32Array(nbBlobs * model.faces.length * 3 * 3), 3);
     
     var index = 0, localPosition;
-    var dx = -(row / 2 * 25), dy = -(row / 2 * 25);
+    var back = -(row / 2 * 25);
+    var dx = back, dy = back, dz = -15;
     for (var i = 0; i < nbBlobs; i++)
     {
         if ((i != 0) && (i % col == 0))
         {
-            dx = -(row / 2 * 25);; 
+            dx = back;
             dy += 25;
         }
         else if (i!=0)
@@ -165,18 +209,20 @@ function initScene()
             dx += 25;   
         }
         
+        var step = dz + Math.random() * 30;
+        
         for (var j = 0; j < model.faces.length; j++)
         {
             localPosition = model.vertices[model.faces[j].a];
-            vertices.setXYZ(index, localPosition.x + dx, localPosition.y + dy, localPosition.z);
+            vertices.setXYZ(index, localPosition.x + dx, localPosition.y + dy, localPosition.z + step);
             index++;    
             
             localPosition = model.vertices[model.faces[j].b];
-            vertices.setXYZ(index, localPosition.x + dx, localPosition.y + dy, localPosition.z);
+            vertices.setXYZ(index, localPosition.x + dx, localPosition.y + dy, localPosition.z + step);
             index++;
             
             localPosition = model.vertices[model.faces[j].c];
-            vertices.setXYZ(index, localPosition.x + dx, localPosition.y + dy, localPosition.z);
+            vertices.setXYZ(index, localPosition.x + dx, localPosition.y + dy, localPosition.z + step);
             index++;
         }
     }
@@ -215,7 +261,7 @@ function initScene()
     
     scene.add(OBJECT);
     
-    camera.position.z = 1000;
+    CAMERA.position.z = 1000;
 
     STATS = new Stats();
     STATS.domElement.style.position = 'absolute';
@@ -228,10 +274,11 @@ function initScene()
         CURRENT_TIME = (new Date().getTime());
         TIME_APPLICATION = CURRENT_TIME - START_TIME;
         
-        // OBJECT.rotation.y += 0.005;
+        if (ROTATE_ALLOWED)
+            OBJECT.rotation.y += 0.005;
         OBJECT.material.uniforms["uTime"].value = TIME_APPLICATION * 0.0005;
         
-        renderer.render(scene, camera);
+        renderer.render(scene, CAMERA);
         
         STATS.update();
     };
