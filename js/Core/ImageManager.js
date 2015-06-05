@@ -142,11 +142,6 @@ function getImageData( image )
     var context = canvas.getContext( '2d' );    
     
     context.drawImage( image, 0, 0, size.x, size.y);
-    
-    canvas.style.position = "absolute";
-    canvas.style.top = "0px";
-    
-    $("body").append(canvas);
 
     return context.getImageData( 0, 0, size.x, size.y );
 }
