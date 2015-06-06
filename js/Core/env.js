@@ -11,6 +11,7 @@ var POSITION_TEXTURE;
 
 var SNAP_COUNT = 0;
 
+var MODEL = null;
 var CAMERA = null;
 var MATERIAL = null;
 var OBJECT = null;
@@ -18,4 +19,4 @@ var OBJECT = null;
 var THREAD = null;
 
 var INTERFACE_STATE = true;
-var ROTATE_ALLOWED = true;
+var ROTATE_ALLOWED = false;

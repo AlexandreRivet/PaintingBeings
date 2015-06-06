@@ -123,7 +123,6 @@ function saveImage(file) {
             IMAGES[file.name].image.className = 'photo';
             $('#gallery_slider').append(IMAGES[file.name].image);
             
-            log("Largeur : "+this.width+", Hauteur : "+ this.height,'info');
             log("L'image '" + file.name + "' a été chargée avec succès.", 'success');
         };
         image.src = e.target.result;
@@ -133,7 +132,7 @@ function saveImage(file) {
 
 function getImageData( image ) 
 {
-    var size = downScale(image, 32);
+    var size = downScale(image, 64);
     
     var canvas = document.createElement( 'canvas' );
     canvas.width = size.x;

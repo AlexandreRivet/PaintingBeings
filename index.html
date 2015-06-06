@@ -17,6 +17,7 @@
     <!-- Scripts JS -->
     <script type="text/javascript" src="js/Core/env.js"></script>
     <script type="text/javascript" src="js/Core/utils.js"></script>
+    <script type="text/javascript" src="js/Core/geometry.js"></script>
     <script type="text/javascript" src="js/Core/ImageManager.js"></script>
     
     <script type="text/javascript" src="js/Shaders/BlobShader.js"></script>
@@ -34,11 +35,11 @@
         uniform float uTime;
     
         attribute vec3 position;
-        attribute float aRef;
-        attribute vec4 color;
+        attribute vec3 aPosition;        
+        attribute float aIndex;        
 
         varying float noise;
-        varying float vRef;
+        varying vec2 vPosition;
           
         /* FUNCTIONS */
         vec3 mod289(vec3 x) 
@@ -148,12 +149,23 @@
         
             return t;
         }
+        
+        mat4 makeTranslation(vec3 pos)
+        {
+            mat4 result = mat4(
+                1.0, 0.0, 0.0, pos.x,
+                0.0, 1.0, 0.0, pos.y,
+                0.0, 0.0, 1.0, pos.z,
+                0.0, 0.0, 0.0, 1.0);
+            
+            return result;        
+        }
 
         /* MAIN */
-        void main()	{
-
-            vRef = color.r;
-
+        void main()	
+        {
+            vPosition = aPosition.xy;
+        
             vec3 normal = vec3(0.0, 0.0, 1.0);
     
             // get a turbulent 3d noise using the normal, normal to high freq
@@ -167,7 +179,8 @@
     
             // move the position along the normal and transform it
             vec3 newPosition = position + normal * displacement;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
+            newPosition += aPosition;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
         }
 
     </script>
@@ -178,12 +191,11 @@
         precision mediump int;
         
         uniform sampler2D uSampler;
-        uniform vec2 uSamplerSize;
         uniform vec2 uBlobsSize;
         uniform float uSeed;
 
         varying float noise;
-        varying float vRef;
+        varying vec2 vPosition;
         
         float random( vec3 scale, float seed ){
             return fract( sin( dot( gl_FragCoord.xyz + seed, scale ) ) * 43758.5453 + seed ) ;
@@ -191,27 +203,16 @@
         
         void main() 
         {
-            float r = .01 * random( vec3( 12.9898, 78.233, 151.7182 ), uSeed );
         
+            float u = (vPosition.x + (uBlobsSize.x / 2.0)) / uBlobsSize.x;
+            float v = (vPosition.y + (uBlobsSize.y / 2.0)) / uBlobsSize.y;
+            vec2 uv = vec2(u, v);
+            
+            float r = .01 * random(vec3( 12.9898, 78.233, 151.7182 ), uSeed);
             float value = 1.0 - 1.3 * noise + r;
             
-            float x = mod(vRef, uBlobsSize.y);
-            float y = vRef / uBlobsSize.x;
+            gl_FragColor = texture2D(uSampler, uv);
             
-            if (x >= uSamplerSize.x || y >= uSamplerSize.y)
-            {
-                gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
-            }
-            else
-            {
-                x /= uSamplerSize.x;
-                y /= uSamplerSize.y;
-                vec2 uv = vec2(x, y);
-                
-                vec4 color = texture2D(uSampler, uv);
-            
-                gl_FragColor = vec4(color.rgb, 1.0);
-            }
         }   
 
     </script>
@@ -277,6 +278,8 @@
             </div>
         </div>
     </div>
+    
+    <div id="debug_algo" style="position:absolute; top:0px;"></div>
     
 </body>
 

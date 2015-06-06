@@ -132,7 +132,6 @@ function initInterface() {
     });
     
     $("body").keyup(function(e) {
-        console.log(e.which);
         switch(e.which) 
         {
             case 73:
@@ -179,75 +178,95 @@ function initScene()
     log('Initialisation scene.', 'info');
     
     var scene = new THREE.Scene();
-    CAMERA = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 2000 );
+    CAMERA = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 15000);
 
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.setClearColor(0x34495E);
     $("#render_panel").append(renderer.domElement);
     
-    var row = 32;
-    var col = 32;
+    var row = 200;
+    var col = 200;
+    var radius = 2000;
+    
     var nbBlobs = row * col;
     
-    var model = new THREE.IcosahedronGeometry(10, 2);
+    MODEL = new THREE.IcosahedronGeometry(20, 2);
     var geometry = new THREE.BufferGeometry();
-    var vertices = new THREE.BufferAttribute(new Float32Array(nbBlobs * model.faces.length * 3 * 3), 3);
     
-    var index = 0, localPosition;
-    var back = -(row / 2 * 25);
-    var dx = back, dy = back, dz = -15;
+    var vertices = new THREE.BufferAttribute(new Float32Array(nbBlobs * MODEL.vertices.length * 3), 3);
+    var step = 0, localPosition;
+    
     for (var i = 0; i < nbBlobs; i++)
     {
-        if ((i != 0) && (i % col == 0))
+        for(var j = 0; j < MODEL.vertices.length; j++)
         {
-            dx = back;
-            dy += 25;
-        }
-        else if (i!=0)
-        {
-            dx += 25;   
-        }
-        
-        var step = dz + Math.random() * 30;
-        
-        for (var j = 0; j < model.faces.length; j++)
-        {
-            localPosition = model.vertices[model.faces[j].a];
-            vertices.setXYZ(index, localPosition.x + dx, localPosition.y + dy, localPosition.z + step);
-            index++;    
-            
-            localPosition = model.vertices[model.faces[j].b];
-            vertices.setXYZ(index, localPosition.x + dx, localPosition.y + dy, localPosition.z + step);
-            index++;
-            
-            localPosition = model.vertices[model.faces[j].c];
-            vertices.setXYZ(index, localPosition.x + dx, localPosition.y + dy, localPosition.z + step);
-            index++;
+            localPosition = MODEL.vertices[j];
+            vertices.setXYZ(step, localPosition.x, localPosition.y, localPosition.z);
+            step++;
         }
     }
     geometry.addAttribute('position', vertices);
     
-    index = 0;
-    var indices = new THREE.BufferAttribute(new Float32Array(nbBlobs * model.faces.length * 3 * 4), 4);
+    var faces = new THREE.BufferAttribute(new Uint32Array(nbBlobs * MODEL.faces.length * 3), 1);
+    var step = 0, localFace;
     for (var i = 0; i < nbBlobs; i++)
     {
-        for (var j = 0; j < model.faces.length; j++)
+        var offset = i * MODEL.vertices.length;
+        
+        for(var j = 0; j < MODEL.faces.length; j++)
         {
-            indices.setXYZW(index, i, 0, 0, 0);
-            index++;
-            indices.setXYZW(index, i, 0, 0, 0);
-            index++;
-            indices.setXYZW(index, i, 0, 0, 0);
-            index++;
+            localFace = MODEL.faces[j];
+            
+            // index a
+            faces.setX(step, localFace.a + offset);
+            step++;
+            
+            // index b
+            faces.setX(step, localFace.b + offset);
+            step++;
+            
+            // index c
+            faces.setX(step, localFace.c + offset);
+            step++;
+        }   
+    }
+    geometry.addAttribute('index', faces);
+    
+    var indexBlob = new THREE.BufferAttribute(new Float32Array(nbBlobs * MODEL.vertices.length), 1);
+    var step = 0;
+    for (var i = 0; i < nbBlobs; i++)
+    {
+        for(var j = 0; j < MODEL.vertices.length; j++)
+        {
+            indexBlob.setX(step, i);
+            step++;
+        }   
+    }    
+    geometry.addAttribute('aIndex', indexBlob);               
+
+    var positions = new THREE.BufferAttribute(new Float32Array(nbBlobs * MODEL.vertices.length * 3), 3);
+    var back = - row / 2 * 25, step = 0;
+    for (var i = 0; i < nbBlobs; i++)
+    {
+        var dx = back + Math.random() * row * 25; 
+        var dy = back + Math.random() * row * 25;
+        var dz = back + Math.random() * row * 25;
+        
+        for (var j = 0; j < MODEL.vertices.length; j++)
+        {
+            positions.setXYZ(step, dx, dy, dz);
+            step++;
         }
     }
-    geometry.addAttribute('color', indices);
+    geometry.addAttribute('aPosition', positions);
     
-    BlobShader.uniforms["uBlobsSize"].value = new THREE.Vector2(row, col);
+    //BlobShader.uniforms["uBlobsSize"].value = new THREE.Vector2(radius * 2, radius * 2);
+    BlobShader.uniforms["uBlobsSize"].value = new THREE.Vector2(row * 25, col * 25);
     MATERIAL = new THREE.RawShaderMaterial(
         {
             uniforms: BlobShader.uniforms,
+            attributes: BlobShader.attributes,
             vertexShader: document.getElementById("vertexShader").textContent,
             fragmentShader: document.getElementById("fragmentShader").textContent,
             transparent: true
@@ -259,9 +278,12 @@ function initScene()
     COLOR_TEXTURE.minFilter = THREE.NearestFilter;
     OBJECT.material.uniforms["uSampler"].value = COLOR_TEXTURE;
     
+    // SphereFormation(col, row, radius);
+    // TorusFormation(row, col, radius, 1000);
+    
     scene.add(OBJECT);
     
-    CAMERA.position.z = 1000;
+    CAMERA.position.z = 4000;
 
     STATS = new Stats();
     STATS.domElement.style.position = 'absolute';
@@ -277,7 +299,7 @@ function initScene()
         if (ROTATE_ALLOWED)
             OBJECT.rotation.y += 0.005;
         OBJECT.material.uniforms["uTime"].value = TIME_APPLICATION * 0.0005;
-        
+
         renderer.render(scene, CAMERA);
         
         STATS.update();
@@ -314,11 +336,11 @@ function startThread()
                 GEN_ALGO_TEXTURE.setColorAtIndex(i, blobs[i].color);
             }
             
-            OBJECT.material.uniforms["uSamplerSize"].value = new THREE.Vector2(width, height);
-            
             COLOR_TEXTURE.image = GEN_ALGO_TEXTURE.mCanvas;
             COLOR_TEXTURE.sourceFile = GEN_ALGO_TEXTURE.mCanvas;
             COLOR_TEXTURE.needsUpdate = true;
+            
+            $("#debug_algo").html(GEN_ALGO_TEXTURE.mCanvas);
         };
     } 
     else 
