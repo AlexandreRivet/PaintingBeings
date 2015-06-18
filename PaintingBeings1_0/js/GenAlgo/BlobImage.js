@@ -1,5 +1,5 @@
 // var blobNbr = 4100;
-var blobMutation = 30;
+var blobMutation = 3;
 
 function BlobImage(blobNbr) 
 {
@@ -39,7 +39,7 @@ BlobImage.prototype =
         
     },
     
-    mutate : function() 
+    mutate : function(image) 
     {   
         var copy = this.clone();
         
@@ -47,7 +47,7 @@ BlobImage.prototype =
         for (var i = 0; i < blobToMutate ; ++i) 
         {
             var randomIndex = Math.floor((Math.random() * this.blobNumber));    
-            copy.blobs[randomIndex].mutate();
+            copy.blobs[randomIndex].mutate(image.blobs[randomIndex]);
         }
         
         return copy;

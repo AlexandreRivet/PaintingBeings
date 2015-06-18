@@ -1,13 +1,9 @@
 var currentPopulation;
 var lastFitness;
-var blobImageRight;
 
 function GenAlgo(currentImage) 
 {         
-    var size = currentImage.length * currentImage[0].length;    
-    
-    blobImageRight = new BlobImage(size);
-    blobImageRight.createFromImage2(currentImage);
+    var size = currentImage.length * currentImage[0].length;
     
     currentPopulation = new Population();
     currentPopulation.randomInit(size);
@@ -20,6 +16,10 @@ function nextPopulation(currentImage)
 
     var newPopulation = new Population();
     
+    
+    var blobimageright = new BlobImage(size);
+    blobimageright.createFromImage(currentImage);
+    
     for (var i = 0; i < percentBest; i++)
     {
         var blobImage = currentPopulation.blobImages[i].clone();
@@ -29,28 +29,27 @@ function nextPopulation(currentImage)
     for (var i = 0; i < percentCrossed; i++)
     {
         var blobImage = currentPopulation.blobImages[i];
-        /*
-        var crossed = null;
-        if(Math.random()*1000 >= 999){
-            crossed = blobImage.crossOver(blobImageRight);
-        }else{*/
-        crossed = blobImage.crossOver(currentPopulation.blobImages[Math.floor(Math.random()*(populationNbr-1))]);
-        //}
+        var crossed;
+        //if(Math.random*100 >= 99)
+            //crossed = blobImage.crossOver(blobimageright);
+        //else    
+            crossed = blobImage.crossOver(currentPopulation.blobImages[Math.floor(Math.random()*(populationNbr-1))]);
+        //if(Math.random()
         newPopulation.blobImages.push(crossed);
     }
     
     for (var i = 0 ; i < percentMutate; i++) 
     {
         var blobImage = currentPopulation.blobImages[i];
-        var muted = blobImage.mutate(new BlobImage(size));
+        var muted = blobImage.mutate(blobimageright);
         newPopulation.blobImages.push(muted);
     }
     
-    for (var i = 0 ; i < percentRandom ; i++) 
+    for (var i = 0 ; i < percentRandom; i++) 
     {
         newPopulation.blobImages.push(new BlobImage(size));
     }
-        
+    
     newPopulation.evaluate(currentImage);
     
     // console.log(newPopulation.blobImages[0].fitness);
