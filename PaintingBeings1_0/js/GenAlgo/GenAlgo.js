@@ -1,9 +1,13 @@
 var currentPopulation;
 var lastFitness;
+var blobImageRight;
 
 function GenAlgo(currentImage) 
 {         
-    var size = currentImage.length * currentImage[0].length;
+    var size = currentImage.length * currentImage[0].length;    
+    
+    blobImageRight = new BlobImage(size);
+    blobImageRight.createFromImage2(currentImage);
     
     currentPopulation = new Population();
     currentPopulation.randomInit(size);
@@ -25,8 +29,13 @@ function nextPopulation(currentImage)
     for (var i = 0; i < percentCrossed; i++)
     {
         var blobImage = currentPopulation.blobImages[i];
-        var crossed = blobImage.crossOver(currentPopulation.blobImages[Math.floor(Math.random()*(populationNbr-1))]);
-        //if(Math.random()
+        /*
+        var crossed = null;
+        if(Math.random()*1000 >= 999){
+            crossed = blobImage.crossOver(blobImageRight);
+        }else{*/
+        crossed = blobImage.crossOver(currentPopulation.blobImages[Math.floor(Math.random()*(populationNbr-1))]);
+        //}
         newPopulation.blobImages.push(crossed);
     }
     
@@ -37,15 +46,11 @@ function nextPopulation(currentImage)
         newPopulation.blobImages.push(muted);
     }
     
-    for (var i = 0 ; i < percentRandom-1 ; i++) 
+    for (var i = 0 ; i < percentRandom ; i++) 
     {
         newPopulation.blobImages.push(new BlobImage(size));
     }
-    
-    var blobImage = new BlobImage(size);
-    blobImage.createFromImage(currentImage);
-    newPopulation.blobImages.push(blobImage);
-    
+        
     newPopulation.evaluate(currentImage);
     
     // console.log(newPopulation.blobImages[0].fitness);
