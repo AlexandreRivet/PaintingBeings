@@ -1,0 +1,166 @@
+<html>
+
+<head>
+
+    <title>Painting Beings v2</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    
+    <!-- Libs JS -->
+    <script type="text/javascript" src="libs/jquery/jquery-2.1.3.js"></script>
+    <script type="text/javascript" src="libs/three/three.js"></script>
+    <script type="text/javascript" src="libs/three/stats.min.js"></script>
+    <script type="text/javascript" src="libs/webcam/webcam.js"></script>
+    
+    <!-- Scripts JS -->
+    <script type="text/javascript" src="js/Core/env.js"></script>
+    <script type="text/javascript" src="js/Core/utils.js"></script>
+    <script type="text/javascript" src="js/Core/geometry.js"></script>
+    <script type="text/javascript" src="js/Core/ImageManager.js"></script>
+    
+    <script type="text/javascript" src="js/Shaders/BlobShader.js"></script>
+    
+    
+    <script type="text/javascript" src="js/Core/main.js"></script>
+    
+    <!-- Deuxieme Module -->
+	<script src="js/controls/OrbitControls.js"></script>
+
+	<script src="js/shaders/CopyShader.js"></script>
+	<script src="js/shaders/FXAAShader.js"></script>
+	<script src="js/shaders/HorizontalTiltShiftShader.js"></script>
+	<script src="js/shaders/VerticalTiltShiftShader.js"></script>
+
+	<script src="js/postprocessing/EffectComposer.js"></script>
+	<script src="js/postprocessing/RenderPass.js"></script>
+	<script src="js/postprocessing/BloomPass.js"></script>
+	<script src="js/postprocessing/ShaderPass.js"></script>
+	<script src="js/postprocessing/MaskPass.js"></script>
+	<script src="js/postprocessing/SavePass.js"></script>
+
+	<script src="js/MarchingCubes.js"></script>
+	<script src="js/ShaderToon.js"></script>
+    
+    <script src="js/Detector.js"></script>
+    <script src="js/libs/stats.min.js"></script>
+	<script src="js/libs/dat.gui.min.js"></script>
+    <script>
+		if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+
+		var MARGIN = 0;
+
+		var SCREEN_WIDTH = window.innerWidth;
+		var SCREEN_HEIGHT = window.innerHeight - 2 * MARGIN;
+
+		var container, stats;
+
+		var camera, scene, renderer;
+
+		var mesh, texture, geometry, materials, material, current_material;
+
+		var light, pointLight, ambientLight;
+
+		var effect, resolution, numBlobs;
+
+		var composer, effectFXAA, hblur, vblur;
+
+		var effectController;
+
+		var time = 0;
+		var clock = new THREE.Clock();
+        
+        // environment map
+
+        var path = "textures/cube/SwedishRoyalCastle/";
+        var format = '.jpg';
+        var urls = [
+            path + 'px' + format, path + 'nx' + format,
+            path + 'py' + format, path + 'ny' + format,
+            path + 'pz' + format, path + 'nz' + format
+        ];
+
+        var reflectionCube = THREE.ImageUtils.loadTextureCube( urls );
+        reflectionCube.format = THREE.RGBFormat;
+
+        var refractionCube = new THREE.Texture( reflectionCube.image, THREE.CubeRefractionMapping );
+        reflectionCube.format = THREE.RGBFormat;
+        
+    </script>
+</head>
+    
+<body>
+    
+    <div id="render_panel"></div>
+    
+    <div id="header">
+        <div id="header_title"><h1>Blob paintings | Mathieu H. - Maxime H. - Maxime L. - Alexandre R.</h1></div>
+    </div>
+    
+    <div id="whatisthis">
+        <div id="whatisthis_content"><img id="whatisthis_content_img" src="images/subject.png"></div>
+        <div id="whatisthis_icon"><div class="btn_icon" id="placement_icon_img" ><img id="whatisthis_icon_img" src="images/question.png"></div></div>         
+    </div>
+    
+    <div id="left_panel">
+        <div id="left_panel_upload">
+            <div class="extended_panel">
+                <div id="upload_area">
+                    <input class="input-file" id="my-file" type="file" multiple>
+                    <div id="upload_area_content">
+                        <label for="my-file" class="input-file-trigger" tabindex="0">Select a file</label>
+                        <img id="upload_area_content_img" src="images/low.png"/>
+                    </div>
+                </div>
+                <div id="webcam"></div>
+            </div>
+            <div class="icon btn_icon"><img class="img_panel" src="images/file.png"/></div>
+        </div>
+        <div id="left_panel_parameters">
+            <div class="extended_panel">
+                <div id="gallery">
+                    <div id="gallery_content">
+                        <div id="gallery_slider"></div>
+                    </div>
+                </div>
+                <div id="parameters">
+                    <div id="parameters_content">
+                        <div class = "checkBoxFloor"><input type="checkbox" name="checkboxG1" id="FloorParam" class="css-checkbox" checked><label for="FloorParam" class="css-label">Floor</label></div>
+                        <h2>Speed</h2>
+                        <ul class="input-list style-2 clearfix"><li><input type="text" id ="SpeedParam" ></li></ul> 
+                        <h2>Number of blobs</h2>
+                        <ul class="input-list style-2 clearfix"><li><input type="text" id ="NumberParam"></li></ul>
+                        <h2>Subtract</h2>
+                        <ul class="input-list style-2 clearfix"><li><input type="text" id ="SubtractParam"></li></ul> 
+                    </div>
+                </div>
+            </div>
+            <div class="icon btn_icon"><img class="img_panel" src="images/gear.png"/></div>
+        
+        </div>
+    </div>
+    
+    <div id="right_panel">
+        <div id="right_panel_console">
+            <div id="right_panel_console_icon" class="icon btn_icon"><img class="img_panel" src="images/console.png"/></div>
+            <div id="right_panel_console_content">
+                <div id="console_area"></div>
+            </div>
+        </div>
+    </div>
+    
+   <div id="right_panel_bis">
+        <div id="right_panel_stats">
+            <div id="right_panel_stats_icon" class="icon btn_icon"><img class="img_panel" src="images/stats.png"/></div>
+            <div id="right_panel_stats_content">
+                <div id="stats_area"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="debug_algo" style="position:absolute; top:0px;"></div>
+    
+</body>
+
+</html>
