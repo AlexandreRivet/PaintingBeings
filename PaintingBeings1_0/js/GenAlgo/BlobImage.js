@@ -1,5 +1,5 @@
 // var blobNbr = 4100;
-var blobMutation = 3;
+var blobMutation = 1;
 
 function BlobImage(blobNbr) 
 {

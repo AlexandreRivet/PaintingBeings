@@ -15,7 +15,16 @@ Blob.prototype = {
     mutate : function(pixel) {
         
         var colorIndex = Math.floor((Math.random() * 3));
-        this.color[colorIndex] = pixel.color[colorIndex];
+        var random = Math.random()*2;
+        if(random){
+            this.color[colorIndex] = pixel.color[colorIndex] - Math.random()*30;
+            if(this.color[colorIndex] < 0)
+                this.color[colorIndex] = 0;
+        }else{
+            this.color[colorIndex] = pixel.color[colorIndex] + Math.random()*30;
+            if(this.color[colorIndex] > 255)
+                this.color[colorIndex] = 255;
+        }
         //this.color[colorIndex] = Math.floor((Math.random() * 255));
         
     },
