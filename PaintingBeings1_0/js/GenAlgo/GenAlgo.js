@@ -26,6 +26,7 @@ function nextPopulation(currentImage)
     {
         var blobImage = currentPopulation.blobImages[i];
         var crossed = blobImage.crossOver(currentPopulation.blobImages[Math.floor(Math.random()*(populationNbr-1))]);
+        //if(Math.random()
         newPopulation.blobImages.push(crossed);
     }
     
@@ -36,10 +37,14 @@ function nextPopulation(currentImage)
         newPopulation.blobImages.push(muted);
     }
     
-    for (var i = 0 ; i < percentRandom ; i++) 
+    for (var i = 0 ; i < percentRandom-1 ; i++) 
     {
         newPopulation.blobImages.push(new BlobImage(size));
     }
+    
+    var blobImage = new BlobImage(size);
+    blobImage.createFromImage(currentImage);
+    newPopulation.blobImages.push(blobImage);
     
     newPopulation.evaluate(currentImage);
     

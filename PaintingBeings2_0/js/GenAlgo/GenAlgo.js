@@ -36,10 +36,14 @@ function nextPopulation(currentImage)
         newPopulation.blobImages.push(muted);
     }
     
-    for (var i = 0 ; i < percentRandom ; i++) 
+    for (var i = 0 ; i < percentRandom-1 ; i++) 
     {
         newPopulation.blobImages.push(new BlobImage(size));
     }
+    
+    var blobImage = new BlobImage(size);
+    blobImage.createFromImage(currentImage);
+    newPopulation.blobImages.push(blobImage);
     
     newPopulation.evaluate(currentImage);
     

@@ -191,7 +191,7 @@ function initScene()
     
     var nbBlobs = row * col;
     
-    MODEL = new THREE.IcosahedronGeometry(20, 2);
+    MODEL = new THREE.IcosahedronGeometry(30, 2);
     var geometry = new THREE.BufferGeometry();
     
     var vertices = new THREE.BufferAttribute(new Float32Array(nbBlobs * MODEL.vertices.length * 3), 3);
