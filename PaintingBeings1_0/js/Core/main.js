@@ -185,8 +185,10 @@ function initScene()
     renderer.setClearColor(0x34495E);
     $("#render_panel").append(renderer.domElement);
     
-    var row = 360;
-    var col = 360;
+    var controls = new THREE.OrbitControls( CAMERA, renderer.domElement );
+    
+    var row = 50;
+    var col = 50;
     var radius = 2000;
     
     var nbBlobs = row * col;
