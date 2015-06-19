@@ -89,6 +89,22 @@ BlobImage.prototype =
                 this.blobs[(i * image[i].length) + j].color = [red, green, blue];
             }
         }        
+    },
+    
+    createFromImage2: function(image)
+    {
+        for(var i = 0; i < image.length ; i++) 
+        {
+            for(var j = 0; j < image[i].length; j ++ ) 
+            {
+                if(Math.random() * 20 > 17){
+                    var red = image[i][j].r;
+                    var green = image[i][j].g;
+                    var blue = image[i][j].b;
+                    this.blobs[(i * image[i].length) + j].color = [red, green, blue];
+                }
+            }
+        }        
     }
 }
             
