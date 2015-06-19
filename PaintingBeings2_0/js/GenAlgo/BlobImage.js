@@ -1,5 +1,5 @@
 // var blobNbr = 4100;
-var blobMutation = 30;
+var blobMutation = 2;
 
 function BlobImage(blobNbr) 
 {
@@ -16,6 +16,7 @@ function BlobImage(blobNbr)
     this.fitness = 0;
     
 }
+
 
 BlobImage.prototype = 
 {
@@ -38,7 +39,7 @@ BlobImage.prototype =
         
     },
     
-    mutate : function() 
+    mutate : function(image) 
     {   
         var copy = this.clone();
         
@@ -46,7 +47,7 @@ BlobImage.prototype =
         for (var i = 0; i < blobToMutate ; ++i) 
         {
             var randomIndex = Math.floor((Math.random() * this.blobNumber));    
-            copy.blobs[randomIndex].mutate();
+            copy.blobs[randomIndex].mutate(image.blobs[randomIndex]);
         }
         
         return copy;
@@ -88,7 +89,22 @@ BlobImage.prototype =
                 this.blobs[(i * image[i].length) + j].color = [red, green, blue];
             }
         }        
-    }
+    },
     
+    createFromImage2: function(image)
+    {
+        for(var i = 0; i < image.length ; i++) 
+        {
+            for(var j = 0; j < image[i].length; j ++ ) 
+            {
+                if(Math.random() * 20 > 17){
+                    var red = image[i][j].r;
+                    var green = image[i][j].g;
+                    var blue = image[i][j].b;
+                    this.blobs[(i * image[i].length) + j].color = [red, green, blue];
+                }
+            }
+        }        
+    }
 }
             

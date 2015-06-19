@@ -185,8 +185,8 @@ function initScene()
     renderer.setClearColor(0x34495E);
     $("#render_panel").append(renderer.domElement);
     
-    var row = 100;
-    var col = 100;
+    var row = 360;
+    var col = 360;
     var radius = 2000;
     
     var nbBlobs = row * col;

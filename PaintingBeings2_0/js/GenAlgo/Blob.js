@@ -12,10 +12,20 @@ function Blob() {
 
 Blob.prototype = {
     
-    mutate : function() {
+    mutate : function(pixel) {
         
         var colorIndex = Math.floor((Math.random() * 3));
-        this.color[colorIndex] = Math.floor((Math.random() * 255));
+        var random = Math.random()*2;
+        if(random){
+            this.color[colorIndex] = pixel.color[colorIndex] - Math.random()*10;
+            if(this.color[colorIndex] < 0)
+                this.color[colorIndex] = 0;
+        }else{
+            this.color[colorIndex] = pixel.color[colorIndex] + Math.random()*10;
+            if(this.color[colorIndex] > 255)
+                this.color[colorIndex] = 255;
+        }
+        //this.color[colorIndex] = Math.floor((Math.random() * 255));
         
     },
     
