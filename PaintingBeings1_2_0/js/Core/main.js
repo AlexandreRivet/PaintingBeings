@@ -127,18 +127,14 @@ function initInterface() {
         
         var data = imageToJSON(pixelsColorArray);
         
-        if (DURATION_ALGO != 0) {
-            
+        if (check(INTERVAL_ID))
             clearInterval(INTERVAL_ID);
-            
-        }
         
         DURATION_ALGO = 0;
         INTERVAL_ID = setInterval(function() {
             
             DURATION_ALGO++;
             $('#durationAlgo').html(formatSeconds(DURATION_ALGO));
-            
             
         }, 1000);
         

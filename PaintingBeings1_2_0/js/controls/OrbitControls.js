@@ -225,8 +225,6 @@ THREE.OrbitControls = function ( object, domElement ) {
 		if ( scope.object instanceof THREE.PerspectiveCamera ) {
 
 			scale /= dollyScale;
-            
-            console.log(scale);
 
 		} else if ( scope.object instanceof THREE.OrthographicCamera ) {
 
@@ -507,8 +505,6 @@ THREE.OrbitControls = function ( object, domElement ) {
 			delta = - event.detail;
 
 		}
-
-        console.log(delta);
         
 		if ( delta > 0 ) {
 
