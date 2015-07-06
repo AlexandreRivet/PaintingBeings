@@ -5,7 +5,7 @@ function CubeFormation(row, col)
     var pos = geometry.attributes.aPosition.array;
     var back = -row / 2 * 25;
     
-    var model = (TYPE_BLOB_V1 == 1) ? MODEL_100K : MODEL_1000K;
+    var model = (TYPE_BLOB_V1 == 1) ? MODEL_5K : (TYPE_BLOB_V1 == 2) ? MODEL_100K : MODEL_1000K;
     
     for (var y = 0; y < row; y++)
     {
@@ -38,7 +38,7 @@ function SphereFormation(row, col, radius)
     var geometry = BLOB_V1.geometry;
     var pos = geometry.attributes.aPosition.array;
     
-    var model = (TYPE_BLOB_V1 == 1) ? MODEL_100K : MODEL_1000K;
+    var model = (TYPE_BLOB_V1 == 1) ? MODEL_5K : (TYPE_BLOB_V1 == 2) ? MODEL_100K : MODEL_1000K;
     
     for (var y = 0; y < row; y++)
     {
@@ -74,7 +74,7 @@ function TorusFormation(row, col, radius, radiusTube)
     var geometry = BLOB_V1.geometry;
     var pos = geometry.attributes.aPosition.array;
     
-    var model = (TYPE_BLOB_V1 == 1) ? MODEL_100K : MODEL_1000K;
+    var model = (TYPE_BLOB_V1 == 1) ? MODEL_5K : (TYPE_BLOB_V1 == 2) ? MODEL_100K : MODEL_1000K;
     
     for (var y = 0; y < row; y++)
     {

@@ -4,13 +4,13 @@ function initScene() {
     SCENE = new THREE.Scene();
     
     // Création de la caméra
-    CAMERA = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 150000);
+    CAMERA = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000000);
     CAMERA.position.set(-500, 500, 1500);
     
     // Création du renderer
     RENDERER = new THREE.WebGLRenderer();
     RENDERER.setSize(window.innerWidth, window.innerHeight);
-    RENDERER.setClearColor(0x34495E);
+    RENDERER.setClearColor(0x52B3D9);
     $("#render_panel").append(RENDERER.domElement);    
     
     // Création des lights
@@ -23,6 +23,7 @@ function initScene() {
     
     // Ajout du control
     CONTROLS = new THREE.OrbitControls(CAMERA, RENDERER.domElement);
+    CONTROLS.maxDistance = 100000;
     
     // Ajout du module de stats
     STATS = new Stats();
@@ -42,15 +43,36 @@ function initScene() {
     // Initialisation des paramètres
     setupParameters();
     
+    // Init skybox
+    var skyGeometry = new THREE.SphereGeometry(200000, 60, 40);
+    var uniforms = {
+        texture: {type: 't', value: THREE.ImageUtils.loadTexture( "textures/skybox_dark.jpg") }
+    };
+        
+    var skyMaterial = new THREE.ShaderMaterial( {
+       
+        uniforms: uniforms,
+        vertexShader: document.getElementById("sky-vertexShader").textContent,
+        fragmentShader: document.getElementById("sky-fragmentShader").textContent,
+        
+    });
+    
+    sky = new THREE.Mesh(skyGeometry, skyMaterial);
+    sky.scale.set(-1, 1, 1);
+    sky.eulerOrder = 'XZY';
+    sky.renderDepth = 1000.0;
+    
+    SCENE.add(sky);
+    
     var initModule1 = function() {
         
         var radius = 10000;
         
+        MODEL_5K = new THREE.IcosahedronGeometry(20, 3);
         MODEL_100K = new THREE.IcosahedronGeometry(20, 2);
         MODEL_1000K = new THREE.BoxGeometry(20, 20, 20);
         
-        GEOMETRY_100K = initWith(MODEL_100K, 316 * 316);
-        GEOMETRY_1000K = initWith(MODEL_1000K, 1000 * 1000);        
+        GEOMETRY_5K = initWith(MODEL_5K, ROW * COL);
     
         BlobShader.uniforms["uBlobsSize"].value = new THREE.Vector2(ROW * 25, COL * 25);
         METERIAL_V1 = new THREE.RawShaderMaterial(
@@ -63,7 +85,7 @@ function initScene() {
             }
         );
         
-        BLOB_V1 = new THREE.Mesh(GEOMETRY_100K, METERIAL_V1);
+        BLOB_V1 = new THREE.Mesh(GEOMETRY_5K, METERIAL_V1);
         BLOB_V1.name = "BLOBS";
         BLOB_V1.visible = true;
         BLOB_V1.material.uniforms["uSampler"].value = COLOR_TEXTURE;
@@ -91,7 +113,7 @@ function initScene() {
         
         BLOB_V2 = new THREE.MarchingCubes(resolution, MATERIAL_V2, true, true);
         BLOB_V2.position.set(0, 0, 0);
-        BLOB_V2.scale.set(700, 700, 700);
+        BLOB_V2.scale.set(2000, 2000, 2000);
         BLOB_V2.enableUvs = true;
         BLOB_V2.enableColors = false;
         BLOB_V2.visible = false;
@@ -118,13 +140,21 @@ function initScene() {
             
             BLOB_V1.material.uniforms["uTime"].value = TIME_APPLICATION * 0.0005;
             
+            if (ROTATE_ALLOWED)
+                BLOB_V1.rotation.y += 0.005;
+            
         } else {
             
             updateCubes(BLOB_V2, TIME, PARAMETERS.numBlobs, PARAMETERS.subtract, PARAMETERS.floor, PARAMETERS.wallX, PARAMETERS.wallz);
             
             BLOB_V2.material.color.setHSL(PARAMETERS.hue, PARAMETERS.saturation, PARAMETERS.lightness);
             
+            if (ROTATE_ALLOWED)
+                BLOB_V2.rotation.y += 0.005;
+            
         }
+        
+        
         
         RENDERER.clear();
         RENDERER.render( SCENE, CAMERA );
@@ -137,11 +167,12 @@ function initScene() {
     initModule2();
     render();
     
+    window.addEventListener( 'resize', onWindowResize, false );
+    
 }
 
 function initWith(model, nbBlobs) {
         
-    // model = new THREE.IcosahedronGeometry(20, 2);
     var geometry = new THREE.BufferGeometry();
     
     var vertices = new THREE.BufferAttribute(new Float32Array(nbBlobs * model.vertices.length * 3), 3);
@@ -210,6 +241,8 @@ function initWith(model, nbBlobs) {
         }
     }   
     geometry.addAttribute('aPosition', positions);
+    
+    log('Geometry with ' + formatNumberByThousand(nbBlobs) + ' blobs instanced.', 'info');
     
     return geometry;
 }
@@ -284,4 +317,13 @@ function updateCubes( object, time, numblobs, subtract, floor, wallx, wallz ) {
     if ( wallz ) object.addPlaneZ( 2, 12 );
     if ( wallx ) object.addPlaneX( 2, 12 );
 
+}
+
+function onWindowResize( event) {
+ 
+    CAMERA.aspect = window.innerWidth / window.innerHeight;
+    CAMERA.updateProjectionMatrix();
+    
+    RENDERER.setSize( window.innerWidth, window.innerHeight);
+    
 }

@@ -31,3 +31,34 @@ function formatDate()
             ((seconds < 10) ? '0' + seconds : seconds) + '.' + 
             ((milliseconds < 100) ? ((milliseconds < 10) ? '00' + milliseconds : '0' + milliseconds) : milliseconds); 
 }
+
+function formatSeconds(seconds)
+{
+    var minutes = Math.floor(seconds / 60);
+    seconds = seconds % 60;
+    
+    return ((minutes < 10) ? '0' + minutes : minutes ) + ':' + ((seconds < 10) ? '0' + seconds : seconds);
+    
+}
+
+function formatNumberByThousand(number) {
+    
+    var str = "", mod, mod, modStr;
+    
+    do {
+        
+        mod = (number % 1000).toString();
+        
+        if (number < 1000)
+            modStr = mod;
+        else
+            modStr = ( (mod.length == 1) ? '00' + mod : ( (mod.length == 2) ? '0' + mod : mod ) );
+        
+        number = parseInt(number / 1000);
+        str = modStr + ((str.length > 0) ? '.' : '') + str; 
+        
+    } while(number != 0);
+    
+    return str;
+    
+}

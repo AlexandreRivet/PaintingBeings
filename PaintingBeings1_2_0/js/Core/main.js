@@ -9,7 +9,7 @@ $(document).ready(function () {
     initScene();
     startThread();
     
-    setTimeout(function() {$("#loader_wrapper").hide();}, Math.random() * 1000 + 2500);
+    setTimeout(function() {$("#loader_wrapper").hide();}, Math.random() * 1000 + 500);
 });
 
 
@@ -127,6 +127,21 @@ function initInterface() {
         
         var data = imageToJSON(pixelsColorArray);
         
+        if (DURATION_ALGO != 0) {
+            
+            clearInterval(INTERVAL_ID);
+            
+        }
+        
+        DURATION_ALGO = 0;
+        INTERVAL_ID = setInterval(function() {
+            
+            DURATION_ALGO++;
+            $('#durationAlgo').html(formatSeconds(DURATION_ALGO));
+            
+            
+        }, 1000);
+        
         THREAD.postMessage(data);
     });
     
@@ -159,35 +174,81 @@ function initInterface() {
             case 82:
                 ROTATE_ALLOWED = !ROTATE_ALLOWED;
                 break;
-            case 107:
-                CAMERA.position.z -= 100;
-                break;
-                
-            case 109:
-                CAMERA.position.z += 100;
-                break;
         }
     });
     
     $('input[name="typeGroup"]:radio').change(function(e) {
        
-        var val = parseInt($(this).val());
+        var val = parseInt($(this).val());    
         
         if (val == 1) {
             
             TYPE_BLOB_V1 = 1;
-            ROW = 316;
-            COL = 316;
+            ROW = 71;
+            COL = 71;
             
-            BLOB_V1 = new THREE.Mesh(GEOMETRY_100K, METERIAL_V1);
+            BLOB_V1 = new THREE.Mesh(GEOMETRY_5K, METERIAL_V1);
             
-        } else if (val == 2) {
+        } else {
             
-            TYPE_BLOB_V1 = 2;
-            ROW = 1000;
-            COL = 1000;
+            if (!ALREADY_ASKED[val - 2]) {
+                
+                if (!confirm('An High-end PC is required for this option. Are you sure?')) {
+                 
+                    HIGH_MODE[val - 2] = false;
+                    
+                    $("#t" + TYPE_BLOB_V1).prop("checked", true);
+                    
+                } else {
+                    
+                    HIGH_MODE[val - 2] = true;
+                    ALREADY_ASKED[val - 2] = true;
+                    
+                }
+                
+            }
             
-            BLOB_V1 = new THREE.Mesh(GEOMETRY_1000K, METERIAL_V1);
+            if (val == 2) {
+                                
+                if (!HIGH_MODE[val - 2]) {
+                 
+                    return;
+                    
+                }
+                
+                TYPE_BLOB_V1 = 2;
+                ROW = 317;
+                COL = 317;
+                
+                if( !check(GEOMETRY_100K) ) {
+                        
+                    GEOMETRY_100K = initWith(MODEL_100K, ROW * COL);
+                    
+                }
+            
+                BLOB_V1 = new THREE.Mesh(GEOMETRY_100K, METERIAL_V1);
+                
+            } else if (val == 3) {
+                
+                if (!HIGH_MODE[val - 2]) {
+                 
+                    return;
+                    
+                }
+                
+                TYPE_BLOB_V1 = 3;
+                ROW = 1000;
+                COL = 1000;
+                
+                if( !check(GEOMETRY_1000K) ) {
+                        
+                    GEOMETRY_1000K = initWith(MODEL_1000K, ROW * COL);
+                    
+                }
+            
+                BLOB_V1 = new THREE.Mesh(GEOMETRY_1000K, METERIAL_V1);
+                
+            }
             
         }
         
@@ -301,6 +362,15 @@ function initInterface() {
         
     });
     
+    $("#a_download").click(function(e) {
+    
+        var data = GEN_ALGO_TEXTURE.mCanvas.toDataURL();
+        
+        $(this).attr("download", 'result_' + formatDate() + '.png');
+        $(this).attr("href", data);
+        
+    });
+    
 }
 
 function flipInterface()
@@ -314,6 +384,12 @@ function flipInterface()
         $("#whatisthis").show();
         $("#right_panel").show();
         $("#right_panel_bis").show();
+        $("#switch_mode").show();
+        
+        if (check(GEN_ALGO_TEXTURE)) {
+            $("#successPercent").show();
+            $("#btn_download").show();
+        }
     }
     else
     {
@@ -321,7 +397,13 @@ function flipInterface()
         $("#left_panel").hide();
         $("#whatisthis").hide();
         $("#right_panel").hide();
-        $("#right_panel_bis").hide();      
+        $("#right_panel_bis").hide();
+        $("#switch_mode").hide();
+        
+        if (check(GEN_ALGO_TEXTURE)) {
+            $("#successPercent").hide();
+            $("#btn_download").hide();
+        }
     }
 }
 
@@ -334,16 +416,24 @@ function startThread()
             THREAD = new Worker('js/WebWorker/GenAlgoWorker.js');
         }
         THREAD.onmessage = function(event) 
-        {   
+        {               
             var data = event.data;
+            
             var blobs = data.blobs;
             
             var width = IMAGES[CURRENT_IMAGE].naturalDownScale.x;
             var height = IMAGES[CURRENT_IMAGE].naturalDownScale.y;
             
+            var maxValue = width * height * 3 * 255;
+            var percentSuccess = ((maxValue - data.fitness) / maxValue) * 100;
+            
+            $("#fitnessAlgo").html(percentSuccess.toFixed(1) + '%');
+            
             if ( (!check(GEN_ALGO_TEXTURE)) || (GEN_ALGO_TEXTURE.mWidth != width) || (GEN_ALGO_TEXTURE.mHeight != height))
             {
                 GEN_ALGO_TEXTURE = new CustomTexture(width, height);
+                $("#btn_download").show();
+                $("#successPercent").show();
             }
             
             for (var i = 0; i < blobs.length; i++)

@@ -141,7 +141,7 @@ function saveImage(file) {
 
 function getImageData( image ) 
 {
-    var size = downScale(image, 64);
+    var size = downScale(image, 100);
     
     var canvas = document.createElement( 'canvas' );
     canvas.width = size.x;

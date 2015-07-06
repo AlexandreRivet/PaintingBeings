@@ -50,6 +50,26 @@
         
     </script>
     
+    <script type="application/x-glsl" id="sky-vertexShader">  
+        varying vec2 vUV;
+
+        void main() {  
+            vUV = uv;
+            vec4 pos = vec4(position, 1.0);
+            gl_Position = projectionMatrix * modelViewMatrix * pos;
+        }
+    </script>
+
+    <script type="application/x-glsl" id="sky-fragmentShader">  
+        uniform sampler2D texture;  
+        varying vec2 vUV;
+
+        void main() {  
+            vec4 sample = texture2D(texture, vUV);
+            gl_FragColor = vec4(sample.xyz, sample.w);
+        }
+    </script> 
+    
      <script id="vertexShader" type="x-shader/x-vertex">
         precision mediump float;
         precision mediump int;
@@ -285,14 +305,20 @@
                                     <label class="radio" for="t1">
                                         <span class="big">
                                             <span class="small"></span>
-                                        </span>100k
+                                        </span>5.000
                                     </label>
                                     <input type="radio" value="2" id="t2" name="typeGroup">
                                     <label class="radio" for="t2">
                                         <span class="big">
                                             <span class="small"></span>
-                                        </span>1000K
-                                    </label>                                    
+                                        </span>100.000
+                                    </label>
+                                    <input type="radio" value="3" id="t3" name="typeGroup">
+                                    <label class="radio" for="t3">
+                                        <span class="big">
+                                            <span class="small"></span>
+                                        </span>1.000.000
+                                    </label> 
                                 </div>    
                             
                                 <div id="formation_blob" class="parameters_placement">
@@ -362,7 +388,13 @@
         </div>
     </div>
     
-    <div id="debug_algo" style="position:absolute; top:0px;"></div>
+    <div id="btn_download">
+        <a href="#" id="a_download" download="result.png"><div id="div_download">Download texture</div></a>
+    </div>
+    
+    <div id="successPercent">
+        <span id="fitnessAlgo">0%</span> - <span id="durationAlgo">00:00</span>
+    </div>
     
 </body>
 
