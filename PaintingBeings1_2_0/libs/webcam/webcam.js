@@ -17,6 +17,7 @@ var Webcam = {
 	loaded: false, // true when webcam movie finishes loading
 	live: false, // true when webcam is initialized and ready to snap
 	userMedia: true, // true when getUserMedia is supported natively
+    error: false, // true when error is fired
 	
 	params: {
 		width: 0,
@@ -55,7 +56,7 @@ var Webcam = {
 			return this.dispatch('error', "Could not locate DOM element to attach to.");
 		}
 		this.container = elem;
-		elem.innerHTML = ''; // start with empty element
+		// elem.innerHTML = ''; // start with empty element
 		
 		// insert "peg" so we can insert our preview canvas adjacent to it later on
 		var peg = document.createElement('div');
@@ -221,6 +222,7 @@ var Webcam = {
 	
 	dispatch: function() {
 		// fire hook callback, passing optional value to it
+        
 		var name = arguments[0].replace(/^on/i, '').toLowerCase();
 		var args = Array.prototype.slice.call(arguments, 1);
 		
@@ -246,6 +248,8 @@ var Webcam = {
 		else if (name == 'error') {
 			// default error handler if no custom one specified
 			alert("Webcam.js Error: " + args[0]);
+            
+            Webcam.error = true;
 		}
 		
 		return false; // no hook defined

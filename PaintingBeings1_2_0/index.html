@@ -284,7 +284,9 @@
                         <img id="upload_area_content_img" src="images/low.png"/>
                     </div>
                 </div>
-                <div id="webcam"></div>
+                <div id="webcam">
+                    <div id="no_webcam">No Webcam</div>
+                </div>
             </div>
             <div class="icon btn_icon"><img class="img_panel" src="images/file.png"/></div>
         </div>
@@ -299,8 +301,30 @@
                     <div id="parameters_content">
                         <div id="version_slider" class="slider_mode1">
                             <div id="version_1">
+                                <div id="downscale_image_1" class="parameters_placement">
+                                    <div class='title_param'>Downscale:</div>
+                                    <input type="radio" checked value="32" id="d1_1" name="downGroup_1">
+                                    <label class="radio" for="d1_1">
+                                        <span class="big">
+                                            <span class="small"></span>
+                                        </span>32
+                                    </label>
+                                    <input type="radio" value="64" id="d2_1" name="downGroup_1">
+                                    <label class="radio" for="d2_1">
+                                        <span class="big">
+                                            <span class="small"></span>
+                                        </span>64
+                                    </label>
+                                    <input type="radio" value="128" id="d3_1" name="downGroup_1">
+                                    <label class="radio" for="d3_1">
+                                        <span class="big">
+                                            <span class="small"></span>
+                                        </span>128
+                                    </label> 
+                                </div>
+                                
                                 <div id="type_blob" class="parameters_placement">
-                                    <div class='title_param'>Type:</div>
+                                    <div class='title_param'>Number:</div>
                                     <input type="radio" checked value="1" id="t1" name="typeGroup">
                                     <label class="radio" for="t1">
                                         <span class="big">
@@ -348,11 +372,34 @@
                             </div>
                             
                             <div id="version_2">
+                                 <div id="downscale_image_2" class="parameters_placement">
+                                    <div class='title_param'>Downscale:</div>
+                                    <input type="radio" checked value="32" id="d1_2" name="downGroup_2">
+                                    <label class="radio" for="d1_2">
+                                        <span class="big">
+                                            <span class="small"></span>
+                                        </span>32
+                                    </label>
+                                    <input type="radio" value="64" id="d2_2" name="downGroup_2">
+                                    <label class="radio" for="d2_2">
+                                        <span class="big">
+                                            <span class="small"></span>
+                                        </span>64
+                                    </label>
+                                    <input type="radio" value="128" id="d3_2" name="downGroup_2">
+                                    <label class="radio" for="d3_2">
+                                        <span class="big">
+                                            <span class="small"></span>
+                                        </span>128
+                                    </label> 
+                                </div>
+                                
+                                
                                 <div class="parameters_placement">
                                     <input type="checkbox" id="FloorParam" checked/><label for="FloorParam"><span class="ui"></span><span class="title_param">Floor</span></label>
                                 </div>
                                 <div id="numBlob" class="parameters_placement">
-                                    <div class='title_param'>Number of blobs:</div><input id="NumberParam" style="display:inline-block;" type="range" min="50" max="500" value="100" step="50"/><div class='title_param' id="numberblob_value" style="margin-left: 20px;">100</div> 
+                                    <div class='title_param'>Number:</div><input id="NumberParam" style="display:inline-block;" type="range" min="50" max="500" value="100" step="50"/><div class='title_param' id="numberblob_value" style="margin-left: 20px;">100</div> 
                                 </div>
                                 <div id="speed" class="parameters_placement">
                                     <div class='title_param'>Speed:</div><input id="SpeedParam" style="display:inline-block;" type="range" min="0" max="2" value="1" step="0.1"/><div class='title_param' id="speed_value" style="margin-left: 20px;">1</div> 

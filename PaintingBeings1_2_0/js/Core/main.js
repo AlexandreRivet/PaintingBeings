@@ -21,41 +21,67 @@ function initInterface() {
         height: $('#webcam').innerHeight(),
     });
     
-    $("#webcam").click(function() {
-        Webcam.snap(function(data) {
-            var img = new Image();
-            img.src = data;
-            img.id = 'photo_' + 'snap_' + SNAP_COUNT;
-            img.className = 'photo';
-            
-            IMAGES['snap_' + SNAP_COUNT] =  {"file": null, "image": img , "naturalImage": null};
-            
-            IMAGES['snap_' + SNAP_COUNT].naturalImage = img.cloneNode(true);
-            
-            $('#gallery_slider').append(IMAGES['snap_' + SNAP_COUNT].image);
-            
-            SNAP_COUNT++;            
-        });
-    });
+    Webcam.attach("#webcam");
     
+    var checkWebcam = function() {
+    
+        if (Webcam.error) {
+        
+            $("#webcam").css('cursor', 'auto');
+            $("#no_webcam").show();
+            
+            return;
+            
+        }            
+        
+        if (Webcam.loaded && Webcam.live) {
+            
+            $("#webcam").click(function() {
+                
+                Webcam.snap(function(data) {
+                    
+                    var img = new Image();
+                    img.src = data;
+                    img.id = 'photo_' + 'snap_' + SNAP_COUNT;
+                    img.className = 'photo';
+
+                    IMAGES['snap_' + SNAP_COUNT] =  {"file": null, "image": img , "naturalImage": null};
+
+                    IMAGES['snap_' + SNAP_COUNT].naturalImage = img.cloneNode(true);
+
+                    $('#gallery_slider').append(IMAGES['snap_' + SNAP_COUNT].image);
+
+                    SNAP_COUNT++; 
+                    
+                });
+                
+            });
+            
+            return;
+                
+        }
+        
+        setTimeout(checkWebcam, 100);
+        
+    }
+    
+    setTimeout(checkWebcam, 100);
+
     $('.icon').click(function(e) {
         var parent = $(this).parent();
         var id = parent.attr('id');
         if (parent.hasClass('visible')) {
+            
             parent.removeClass('visible').addClass('hidden');
              
-            if (id == "left_panel_upload")
-                Webcam.reset();
         } else if (parent.hasClass('hidden')) {
-            parent.removeClass('hidden').addClass('visible');
             
-            if (id == "left_panel_upload")
-                Webcam.attach("#webcam");
+            parent.removeClass('hidden').addClass('visible');
+                
         } else {
+            
             parent.addClass('visible');
             
-            if (id == "left_panel_upload")
-                Webcam.attach("#webcam");
         }
     });
     
@@ -173,6 +199,31 @@ function initInterface() {
         }
     });
     
+    $('input[name="downGroup_1"]:radio').change(function(e) {
+       
+        var val = parseInt($(this).val());
+        DOWNSCALE_RATIO = val;
+        
+        var id = $(this).attr('id');
+        id = parseInt(id.substr(1, 1)); 
+        
+        $("#d" + id + "_2").prop("checked", true);
+
+    });
+    
+    $('input[name="downGroup_2"]:radio').change(function(e) {
+       
+        var val = parseInt($(this).val());
+        DOWNSCALE_RATIO = val;
+        
+        var id = $(this).attr('id');
+        id = parseInt(id.substr(1, 1)); 
+        
+        $("#d" + id + "_1").prop("checked", true);
+        
+    });
+    
+    
     $('input[name="typeGroup"]:radio').change(function(e) {
        
         var val = parseInt($(this).val());    
@@ -275,7 +326,7 @@ function initInterface() {
         }
         
          
-     });
+    });
         
     
 

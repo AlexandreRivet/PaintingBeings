@@ -191,6 +191,8 @@ body
     cursor: pointer;
     border-top: 1px solid white;
     border-right: 1px solid white;
+    
+    z-index: 100;
 }
 
 .mode1
@@ -370,6 +372,20 @@ body
     margin: 10px;    
     cursor: pointer;    
     border: 2px dashed white;
+}
+
+#no_webcam
+{
+    display: none;
+    position: absolute;
+    color: white;
+    width: 100px;
+    left: 50%;
+    margin-left: -50px;
+    text-align: center;
+    height: 25px;
+    top: 50%;
+    margin-top: -12.5px;
 }
 
 
